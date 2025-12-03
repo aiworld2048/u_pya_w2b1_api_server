@@ -25,12 +25,17 @@ use App\Http\Controllers\Api\V1\Game\LaunchGameController;
 use App\Http\Controllers\Api\V1\WithDrawRequestController;
 use App\Http\Controllers\Api\V1\PromotionController;
 use App\Http\Controllers\Api\V1\Game\Buffalo\BuffaloGameController;
+use App\Http\Controllers\Api\V1\Player\AutoPlayerCreateController;
+
 
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/player-change-password', [AuthController::class, 'playerChangePassword']);
 Route::post('/logout', [AuthController::class, 'logout']);
+// auto player create route
+Route::post('/guest-register', [AutoPlayerCreateController::class, 'register']);
+
 
 
 

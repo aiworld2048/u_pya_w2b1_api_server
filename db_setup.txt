@@ -17,7 +17,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO w2b1_db_user
 sudo -i -u postgres
 psql -d ponewine_db
 
-php -r "file_put_contents('/var/www/html/azm_999_api_server/storage/logs/laravel.log', '');" 
+php -r "file_put_contents('/var/www/html/u_pya_w2b1_api_server/storage/logs/laravel.log', '');" 
 composer require elephantio/elephant.io
 
 
