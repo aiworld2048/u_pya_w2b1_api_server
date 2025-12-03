@@ -69,7 +69,7 @@ class AutoPlayerCreateController extends Controller
                 'agent_id' => $agent->id,
                 'status' => 1,
                 'is_changed_password' => $request->is_changed_password,
-                'type' => '30',
+                'type' => $request->type,
                 'referral_code' => $request->referral_code,
             ]);
 
