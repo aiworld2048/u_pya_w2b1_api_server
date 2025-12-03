@@ -72,7 +72,7 @@ class GameTypeProductTableSeeder extends Seeder
             49 => ['type' => 'SLOT', 'image' => 'mr_slotty.png'],
             50 => ['type' => 'SLOT', 'image' => 'mr_slotty.png'],
             51 => ['type' => 'SLOT', 'image' => 'mr_slotty.png'],
-            52 => ['type' => 'SLOT', 'image' => 'Playace.png'],
+            52 => ['type' => 'SLOT', 'image' => 'playace.png'],
             53 => ['type' => 'LIVE_CASINO', 'image' => 'Playace_casino.png'],
             54 => ['type' => 'SLOT', 'image' => 'booming_game.png'],
             55 => ['type' => 'OTHER', 'image' => 'spribe.png'],
