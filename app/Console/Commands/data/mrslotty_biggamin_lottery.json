@@ -1,0 +1,51 @@
+{
+    "code": 0,
+    "message": "",
+    "provider_games": [
+        {
+            "game_code": "bgaming-JogoDoBicho",
+            "game_name": "Jogo do Bicho",
+            "game_type": "LOTTERY",
+            "image_url": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+            "product_id": 1295,
+            "product_code": 1058,
+            "support_currency": "CNY,MMK,EUR,MXN,BRL,ARS,BGN,SEK,UZS,XAF,LAK,KRW,UGX,ZMW,USD,TWD,MNT,RON,UYU,UAH,THB,INR,PKR,NGN,PLN,ETB,HKD,CAD,CLP,VND,KHR,AUD,MAD,MYR,KES,PEN,AFN,SAR,QAR,IDR,PHP,AOA,RUB,TND,AMD,HRK,NZD,AED,AZN,CZK,NOK,ZAR,BDT,JPY,USDT,CHF,DKK,HUF,IRR,SGD,CDF,COP,GBP,TRY",
+            "status": "ACTIVATED",
+            "allow_free_round": false,
+            "lang_name": {
+                "0": "Jogo do Bicho",
+                "1": "Jogo do Bicho",
+                "12": "Jogo do Bicho",
+                "2": "Jogo do Bicho",
+                "3": "Jogo do Bicho",
+                "33": "Jogo do Bicho",
+                "39": "Jogo do Bicho",
+                "4": "Jogo do Bicho",
+                "5": "Jogo do Bicho",
+                "6": "Jogo do Bicho",
+                "7": "Jogo do Bicho",
+                "9": "Jogo do Bicho"
+            },
+            "lang_icon": {
+                "0": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "1": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "12": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "2": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "3": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "33": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "39": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "4": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "5": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "6": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "7": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png",
+                "9": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1058/LOTTERY/bgaming-JogoDoBicho.png"
+            },
+            "created_at": 1733194816005
+        }
+    ],
+    "pagination": {
+        "size": 0,
+        "offset": 0,
+        "total": "1"
+    }
+}

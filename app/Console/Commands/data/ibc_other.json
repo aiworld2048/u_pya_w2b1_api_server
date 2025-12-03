@@ -1,0 +1,131 @@
+{
+    "code": 0,
+    "message": "",
+    "provider_games": [
+        {
+            "game_code": "161",
+            "game_name": "Number Game",
+            "game_type": "OTHER",
+            "image_url": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+            "product_id": 1227,
+            "product_code": 1046,
+            "support_currency": "ALL",
+            "status": "ACTIVATED",
+            "allow_free_round": false,
+            "lang_name": {
+                "0": "Number Game",
+                "1": "Number Game",
+                "12": "Number Game",
+                "2": "Number Game",
+                "3": "Number Game",
+                "33": "Number Game",
+                "39": "Number Game",
+                "4": "Number Game",
+                "5": "Number Game",
+                "6": "Number Game",
+                "7": "Number Game",
+                "9": "Number Game"
+            },
+            "lang_icon": {
+                "0": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "1": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "12": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "2": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "3": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "33": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "39": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "4": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "5": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "6": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "7": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png",
+                "9": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/161.png"
+            },
+            "created_at": 1722913861000
+        },
+        {
+            "game_code": "164",
+            "game_name": "Happy 5",
+            "game_type": "OTHER",
+            "image_url": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+            "product_id": 1227,
+            "product_code": 1046,
+            "support_currency": "ALL",
+            "status": "ACTIVATED",
+            "allow_free_round": false,
+            "lang_name": {
+                "0": "Happy 5",
+                "1": "Happy 5",
+                "12": "Happy 5",
+                "2": "Happy 5",
+                "3": "Happy 5",
+                "33": "Happy 5",
+                "39": "Happy 5",
+                "4": "Happy 5",
+                "5": "Happy 5",
+                "6": "Happy 5",
+                "7": "Happy 5",
+                "9": "Happy 5"
+            },
+            "lang_icon": {
+                "0": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "1": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "12": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "2": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "3": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "33": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "39": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "4": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "5": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "6": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "7": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png",
+                "9": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/164.png"
+            },
+            "created_at": 1722913861000
+        },
+        {
+            "game_code": "168",
+            "game_name": "Happy 5 Linked Games",
+            "game_type": "OTHER",
+            "image_url": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+            "product_id": 1227,
+            "product_code": 1046,
+            "support_currency": "ALL",
+            "status": "ACTIVATED",
+            "allow_free_round": false,
+            "lang_name": {
+                "0": "Happy 5 Linked Games",
+                "1": "Happy 5 Linked Games",
+                "12": "Happy 5 Linked Games",
+                "2": "Happy 5 Linked Games",
+                "3": "Happy 5 Linked Games",
+                "33": "Happy 5 Linked Games",
+                "39": "Happy 5 Linked Games",
+                "4": "Happy 5 Linked Games",
+                "5": "Happy 5 Linked Games",
+                "6": "Happy 5 Linked Games",
+                "7": "Happy 5 Linked Games",
+                "9": "Happy 5 Linked Games"
+            },
+            "lang_icon": {
+                "0": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "1": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "12": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "2": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "3": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "33": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "39": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "4": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "5": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "6": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "7": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png",
+                "9": "https://images.gscplusmd.com/statics/production/publics/images/games/1/1046/OTHER/168.png"
+            },
+            "created_at": 1722913861000
+        }
+    ],
+    "pagination": {
+        "size": 0,
+        "offset": 0,
+        "total": "3"
+    }
+}
