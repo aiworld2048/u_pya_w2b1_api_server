@@ -55,7 +55,7 @@ class GameTypeProductTableSeeder extends Seeder
             32 => ['type' => 'LIVE_CASINO', 'image' => 'Dream_Gaming_Casino.png'],
             33 => ['type' => 'LIVE_CASINO', 'image' => 'BG_gaming.png'],
             34 => ['type' => 'FISHING', 'image' => 'BigGammingFishing.png'],
-            35 => ['type' => 'SLOT', 'image' => 'Advantplay.png'],
+            35 => ['type' => 'SLOT', 'image' => 'advantplay.png'],
             36 => ['type' => 'SLOT', 'image' => 'Play_Star.png'],
             37 => ['type' => 'SLOT', 'image' => 'play_star_slot.png'],
             38 => ['type' => 'FISHING', 'image' => 'play_star_slot.png'],
