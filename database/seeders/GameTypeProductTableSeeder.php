@@ -35,7 +35,7 @@ class GameTypeProductTableSeeder extends Seeder
             12 => ['type' => 'SLOT', 'image' => 'j_db.png'],
             13 => ['type' => 'FISHING', 'image' => 'JDBFishing.png'],
             14 => ['type' => 'OTHER', 'image' => 'j_db.png'],
-            15 => ['type' => 'SLOT', 'image' => 'joker.png'],
+            15 => ['type' => 'SLOT', 'image' => 'jo_ker.png'],
             16 => ['type' => 'OTHER', 'image' => 'jo_ker.png'],
             17 => ['type' => 'FISHING', 'image' => 'JokerFishing.png'],
             18 => ['type' => 'SPORT_BOOK', 'image' => 'SBO_bet_Sport_Book.png'],
