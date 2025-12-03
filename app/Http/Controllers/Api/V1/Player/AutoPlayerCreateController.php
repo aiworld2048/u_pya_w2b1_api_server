@@ -75,6 +75,16 @@ class AutoPlayerCreateController extends Controller
 
             $user->roles()->sync(self::PLAYER_ROLE);
 
+            Log::info([
+                'user_id' => $user->id,
+                'user_name' => $user->user_name,
+                'user_email' => $user->email,
+                'user_phone' => $user->phone,
+                'user_password' => $user->password,
+                'user_agent_id' => $user->agent_id,
+                'user_status' => $user->status,
+            ]);
+
 
             // Generate token
             $token = $user->createToken($user->user_name)->plainTextToken;
