@@ -16,7 +16,7 @@ class BuffaloGameService
      * IMPORTANT: site_url is used for token generation, lobby_url is for redirects
      */
     private const SITE_NAME = 'AZM999';
-    private const SITE_PREFIX = 'az9';
+    private const SITE_PREFIX = 'gcc';
     private const SITE_URL = 'https://master.azm999.com'; // Used for token generation - must match provider config
     private const SITE_LOBBY_URL = ''; // Used for lobby redirects https://online.azm999.com
 

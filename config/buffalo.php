@@ -12,9 +12,9 @@ return [
     |
     */
     'site' => [
-        'name' => env('BUFFALO_SITE_NAME', 'AZM999'),
-        'prefix' => env('BUFFALO_SITE_PREFIX', 'az9'),
-        'url' => env('BUFFALO_SITE_URL', 'https://master.azm999.com/'), // Must match provider config for token generation
+        'name' => env('BUFFALO_SITE_NAME', 'W2B1'),
+        'prefix' => env('BUFFALO_SITE_PREFIX', 'gcc'),
+        'url' => env('BUFFALO_SITE_URL', 'https://ag.goldencitycasino123.site/'), // Must match provider config for token generation
         'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL // https://online.azm999.com
     ],
 
@@ -28,12 +28,12 @@ return [
     | metadata (name, URL, lobby URL, etc.).
     |
     */
-    'default_site' => env('BUFFALO_DEFAULT_SITE', 'az9'),
+    'default_site' => env('BUFFALO_DEFAULT_SITE', 'gcc'),
     'sites' => [
-        'az9' => [
-            'name' => env('BUFFALO_SITE_NAME', 'AZM999'),
-            'prefix' => env('BUFFALO_SITE_PREFIX', 'az9'),
-            'site_url' => env('BUFFALO_SITE_URL', 'https://master.azm999.com/'), // Must match provider config for token generation
+        'gcc' => [
+            'name' => env('BUFFALO_SITE_NAME', 'W2B1'),
+            'prefix' => env('BUFFALO_SITE_PREFIX', 'gcc'),
+            'site_url' => env('BUFFALO_SITE_URL', 'https://ag.goldencitycasino123.site/'), // Must match provider config for token generation
             'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL https://online.azm999.com
         ],
     ],
