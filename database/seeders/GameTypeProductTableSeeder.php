@@ -60,7 +60,7 @@ class GameTypeProductTableSeeder extends Seeder
             37 => ['type' => 'SLOT', 'image' => 'play_star_slot.png'],
             38 => ['type' => 'FISHING', 'image' => 'play_star_slot.png'],
             39 => ['type' => 'SLOT', 'image' => 'bgaming.png'],
-            40 => ['type' => 'SLOT', 'image' => 'boongo.png'],
+            40 => ['type' => 'SLOT', 'image' => 'booongo.png'],
             41 => ['type' => 'SLOT', 'image' => 'fazi.png'],
             42 => ['type' => 'SLOT', 'image' => 'felix.png'],
             43 => ['type' => 'SLOT', 'image' => 'funtagaming.png'],
