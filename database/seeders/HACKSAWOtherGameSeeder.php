@@ -15,7 +15,7 @@ class HACKSAWOtherGameSeeder extends Seeder
      */
     public function run()
     {
-        $jsonPath = base_path('app/Console/Commands/data/hacksaw_other.json');
+        $jsonPath = base_path('app/Console/Commands/json_data/hack_saw.json');
         $data = json_decode(File::get($jsonPath), true);
         $now = Carbon::now();
 
@@ -29,7 +29,7 @@ class HACKSAWOtherGameSeeder extends Seeder
                         'image_url' => $game['image_url'],
                         'provider_product_id' => $game['product_id'],
                         'game_type_id' => 13,
-                        'product_id' => 52,
+                        'product_id' => 65,
                         'product_code' => $game['product_code'],
                         'support_currency' => $game['support_currency'],
                         'status' => $game['status'],

@@ -15,7 +15,7 @@ class MRSlottyOTHERSeeder extends Seeder
      */
     public function run()
     {
-        $jsonPath = base_path('app/Console/Commands/data/mrslotty_biggaming_other.json');
+        $jsonPath = base_path('app/Console/Commands/data/mrslotty_other.json');
         $data = json_decode(File::get($jsonPath), true);
         $now = Carbon::now();
 
@@ -29,11 +29,11 @@ class MRSlottyOTHERSeeder extends Seeder
                         'image_url' => $game['image_url'],
                         'provider_product_id' => $game['product_id'],
                         'game_type_id' => 13,
-                        'product_id' => 48,
+                        'product_id' => 41,
                         'product_code' => $game['product_code'],
                         'support_currency' => $game['support_currency'],
                         'status' => $game['status'],
-                        'provider' => 'MRSlottyOTHER',
+                        'provider' => 'CT855',
                         'game_list_status' => 1,
                         'created_at' => $now,
                         'updated_at' => $now,

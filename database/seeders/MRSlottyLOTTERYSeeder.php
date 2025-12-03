@@ -15,7 +15,7 @@ class MRSlottyLOTTERYSeeder extends Seeder
      */
     public function run()
     {
-        $jsonPath = base_path('app/Console/Commands/data/mrslotty_biggamin_lottery.json');
+        $jsonPath = base_path('app/Console/Commands/data/mrslotty_lottery.json');
         $data = json_decode(File::get($jsonPath), true);
         $now = Carbon::now();
 
@@ -29,7 +29,7 @@ class MRSlottyLOTTERYSeeder extends Seeder
                         'image_url' => $game['image_url'],
                         'provider_product_id' => $game['product_id'],
                         'game_type_id' => 5,
-                        'product_id' => 47,
+                        'product_id' => 40,
                         'product_code' => $game['product_code'],
                         'support_currency' => $game['support_currency'],
                         'status' => $game['status'],

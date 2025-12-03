@@ -15,7 +15,7 @@ class BigGamingFishingSeeder extends Seeder
      */
     public function run()
     {
-        $jsonPath = base_path('app/Console/Commands/data/big_gaming_fishin.json');
+        $jsonPath = base_path('app/Console/Commands/json_data/big_gaming_fishin.json');
         $data = json_decode(File::get($jsonPath), true);
         $now = Carbon::now();
 
@@ -29,11 +29,11 @@ class BigGamingFishingSeeder extends Seeder
                         'image_url' => $game['image_url'],
                         'provider_product_id' => $game['product_id'],
                         'game_type_id' => 8,
-                        'product_id' => 16,
+                        'product_id' => 34,
                         'product_code' => $game['product_code'],
                         'support_currency' => $game['support_currency'],
                         'status' => $game['status'],
-                        'provider' => 'BigGamingFishing',
+                        'provider' => 'BigGaming',
                         'game_list_status' => 1,
                         'created_at' => $now,
                         'updated_at' => $now,

@@ -15,7 +15,7 @@ class SBOPokerSeeder extends Seeder
      */
     public function run()
     {
-        $jsonPath = base_path('app/Console/Commands/data/sbo_poker.json');
+        $jsonPath = base_path('app/Console/Commands/data/seo_poker.json');
         $data = json_decode(File::get($jsonPath), true);
         $now = Carbon::now();
 
@@ -29,11 +29,11 @@ class SBOPokerSeeder extends Seeder
                         'image_url' => $game['image_url'],
                         'provider_product_id' => $game['product_id'],
                         'game_type_id' => 12,
-                        'product_id' => 23,
+                        'product_id' => 93,
                         'product_code' => $game['product_code'],
                         'support_currency' => $game['support_currency'],
                         'status' => $game['status'],
-                        'provider' => 'SBOPoker',
+                        'provider' => 'SBO',
                         'game_list_status' => 1,
                         'created_at' => $now,
                         'updated_at' => $now,
