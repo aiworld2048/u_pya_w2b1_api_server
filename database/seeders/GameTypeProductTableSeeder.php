@@ -90,7 +90,7 @@ class GameTypeProductTableSeeder extends Seeder
             67 => ['type' => 'SLOT', 'image' => 'novomatic.png'],
             68 => ['type' => 'SPORT_BOOK', 'image' => 'S_Sport.png'],
             69 => ['type' => 'OTHER', 'image' => 'aviatrix.jfif'],
-            70 => ['type' => 'SLOT', 'image' => 'SmartSoft.png'],
+            70 => ['type' => 'SLOT', 'image' => 'smart_soft.png'],
             71 => ['type' => 'LIVE_CASINO', 'image' => 'WorldEntertainment.png'],
             72 => ['type' => 'SPORT_BOOK', 'image' => 'WorldEntertainment.png'],
             73 => ['type' => 'SLOT', 'image' => 'WorldEntertainment.png'],
