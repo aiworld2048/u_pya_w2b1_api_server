@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BankController;
 use App\Http\Controllers\Admin\BannerAdsController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BannerTextController;
+use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DepositRequestController;
 use App\Http\Controllers\Admin\PaymentTypeController;
@@ -105,6 +106,10 @@ Route::group([
     Route::middleware(['permission:player_view'])->group(function () {
         Route::get('players', [PlayerController::class, 'index'])->name('player.index');
         Route::get('players/{player}', [PlayerController::class, 'show'])->name('player.show');
+
+        Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
+        Route::get('chat/{player}/messages', [ChatController::class, 'messages'])->name('chat.messages');
+        Route::post('chat/{player}/messages', [ChatController::class, 'store'])->name('chat.messages.store');
     });
 
     Route::middleware(['permission:player_update'])->group(function () {

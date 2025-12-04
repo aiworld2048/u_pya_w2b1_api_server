@@ -9,11 +9,26 @@ return [
     | URL and optional API key for the dedicated Socket.IO notification server.
     |
     */
-    'server_url' => env('NOTIFICATION_SERVER_URL', 'https://socket.W2B1.com'),
+    'server_url' => env('NOTIFICATION_SERVER_URL', 'https://socket.azm999.com'),
 
     'server_endpoint' => env('NOTIFICATION_SERVER_ENDPOINT', '/'),
 
     'server_key' => env('NOTIFICATION_SERVER_KEY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Socket Event Names
+    |--------------------------------------------------------------------------
+    |
+    | Allows us to emit different event names for general notifications and chat
+    | messages. By default both reuse the legacy "send_noti" event to remain
+    | backward compatible with the current realtime server.
+    |
+    */
+    'events' => [
+        'notification' => env('NOTIFICATION_EVENT', 'send_noti'),
+        'chat' => env('NOTIFICATION_CHAT_EVENT', env('NOTIFICATION_EVENT', 'send_noti')),
+    ],
 
     /*
     |--------------------------------------------------------------------------

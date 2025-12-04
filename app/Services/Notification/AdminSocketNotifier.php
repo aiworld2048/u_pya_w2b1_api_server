@@ -95,6 +95,8 @@ class AdminSocketNotifier
             return;
         }
 
+        $event = config('notification.events.notification', 'send_noti');
+
         try {
             $client = new Client(new Version4X($serverUrl, [
                 'connect_timeout' => 5,
@@ -107,11 +109,12 @@ class AdminSocketNotifier
             ]));
 
             $client->connect();
-            $client->emit('send_noti', $payload);
+            $client->emit($event, $payload);
             $client->disconnect();
         } catch (\Throwable $th) {
             Log::error('Socket emit failed', [
                 'server' => $serverUrl,
+                'event' => $event,
                 'error' => $th->getMessage(),
                 'payload' => $payload,
             ]);

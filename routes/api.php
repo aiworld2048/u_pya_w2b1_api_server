@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\WithDrawRequestController;
 use App\Http\Controllers\Api\V1\PromotionController;
 use App\Http\Controllers\Api\V1\Game\Buffalo\BuffaloGameController;
 use App\Http\Controllers\Api\V1\Player\AutoPlayerCreateController;
+use App\Http\Controllers\Api\V1\Chat\PlayerChatController;
 
 
 
@@ -99,6 +100,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     
     Route::get('contact', [ContactController::class, 'get']);
+
+    Route::prefix('chat')->group(function () {
+        Route::get('messages', [PlayerChatController::class, 'index']);
+        Route::post('messages', [PlayerChatController::class, 'store']);
+    });
 });
 
 Route::get('promotion', [PromotionController::class, 'index']);
