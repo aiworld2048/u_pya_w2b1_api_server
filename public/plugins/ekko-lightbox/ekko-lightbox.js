@@ -58,7 +58,7 @@ var Lightbox = (function ($) {
        _$modalFooter: The .modal-footer
     _$lightboxContainerOne: Container of the first lightbox element
     _$lightboxContainerTwo: Container of the second lightbox element
-    _$lightbaz9ody: First element in the container
+    _$lightbgccody: First element in the container
     _$modalArrows: The overlayed arrows container
    	 _$galleryItems: Other <a>'s available for this gallery
     _galleryName: Name of the current data('gallery') showing
@@ -113,8 +113,8 @@ var Lightbox = (function ($) {
 			this._$modalFooter = this._$modal.find('.modal-footer').first();
 
 			this._$lightboxContainer = this._$modalBody.find('.ekko-lightbox-container').first();
-			this._$lightbaz9odyOne = this._$lightboxContainer.find('> div:first-child').first();
-			this._$lightbaz9odyTwo = this._$lightboxContainer.find('> div:last-child').first();
+			this._$lightbgccodyOne = this._$lightboxContainer.find('> div:first-child').first();
+			this._$lightbgccodyTwo = this._$lightboxContainer.find('> div:last-child').first();
 
 			this._border = this._calculateBorders();
 			this._padding = this._calculatePadding();
@@ -272,18 +272,18 @@ var Lightbox = (function ($) {
 				var _this2 = this;
 
 				// if currently showing an image, fade it out and remove
-				var $toUse = this._$lightbaz9odyTwo;
-				var $current = this._$lightbaz9odyOne;
+				var $toUse = this._$lightbgccodyTwo;
+				var $current = this._$lightbgccodyOne;
 
-				if (this._$lightbaz9odyTwo.hasClass('in')) {
-					$toUse = this._$lightbaz9odyOne;
-					$current = this._$lightbaz9odyTwo;
+				if (this._$lightbgccodyTwo.hasClass('in')) {
+					$toUse = this._$lightbgccodyOne;
+					$current = this._$lightbgccodyTwo;
 				}
 
 				$current.removeClass('in show');
 				setTimeout(function () {
-					if (!_this2._$lightbaz9odyTwo.hasClass('in')) _this2._$lightbaz9odyTwo.empty();
-					if (!_this2._$lightbaz9odyOne.hasClass('in')) _this2._$lightbaz9odyOne.empty();
+					if (!_this2._$lightbgccodyTwo.hasClass('in')) _this2._$lightbgccodyTwo.empty();
+					if (!_this2._$lightbgccodyOne.hasClass('in')) _this2._$lightbgccodyOne.empty();
 				}, 500);
 
 				$toUse.addClass('in show');

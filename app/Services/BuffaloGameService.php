@@ -22,7 +22,7 @@ class BuffaloGameService
 
     /**
      * Resolve site configuration for the provided prefix.
-     * IMPORTANT: For 'az9' prefix, site_url MUST be 'https://master.W2B1.com' for token generation
+     * IMPORTANT: For 'gcc' prefix, site_url MUST be 'https://master.W2B1.com' for token generation
      */
     private static function getResolvedSiteConfig(?string $sitePrefix = null): array
     {
@@ -49,12 +49,12 @@ class BuffaloGameService
                         'lobby_url' => $config['lobby_url'] ?? $default['lobby_url'],
                     ], $config);
                     
-                    // CRITICAL FIX: Force correct site_url for 'az9' prefix (must match provider config)
-                    if (strtolower($targetPrefix) === 'az9') {
+                    // CRITICAL FIX: Force correct site_url for 'gcc' prefix (must match provider config)
+                    if (strtolower($targetPrefix) === 'gcc') {
                         $originalSiteUrl = $resolvedConfig['site_url'] ?? 'not set';
                         $resolvedConfig['site_url'] = 'https://goldencitycasino123.pro';
                         if ($originalSiteUrl !== 'https://goldencitycasino123.pro') {
-                            Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix', [
+                            Log::warning('Buffalo Game Service - Overriding site_url for gcc prefix', [
                                 'original_site_url' => $originalSiteUrl,
                                 'corrected_site_url' => 'https://goldencitycasino123.pro',
                                 'reason' => 'Token generation must match provider config'
@@ -71,12 +71,12 @@ class BuffaloGameService
             $default['prefix'] = $sitePrefix;
         }
         
-        // CRITICAL FIX: Force correct site_url for 'az9' prefix (must match provider config)
-        if (strtolower($default['prefix']) === 'az9') {
+        // CRITICAL FIX: Force correct site_url for 'gcc' prefix (must match provider config)
+        if (strtolower($default['prefix']) === 'gcc') {
             $originalSiteUrl = $default['site_url'] ?? 'not set';
             $default['site_url'] = 'https://goldencitycasino123.pro';
             if ($originalSiteUrl !== 'https://goldencitycasino123.pro') {
-                Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix (default)', [
+                Log::warning('Buffalo Game Service - Overriding site_url for gcc prefix (default)', [
                     'original_site_url' => $originalSiteUrl,
                     'corrected_site_url' => 'https://goldencitycasino123.pro',
                     'reason' => 'Token generation must match provider config'

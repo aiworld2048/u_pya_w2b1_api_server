@@ -11,7 +11,7 @@ class BuffaloGameService
      * Site configuration for TriBet
      */
     private const SITE_NAME = 'https://master.W2B1.com';
-    private const SITE_PREFIX = 'az9'; // az9
+    private const SITE_PREFIX = 'gcc'; // gcc
     private const SITE_URL = 'https://master.W2B1.com';
 
     /**

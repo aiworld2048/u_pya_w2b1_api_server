@@ -174,7 +174,7 @@
             self.paper = new Raphael(self.$map[0], self.mapConf.width, self.mapConf.height);
 
             // issue #135: Check for Raphael bug on text element boundaries
-            if (self.isRaphaelBBaz9ugPresent() === true) {
+            if (self.isRaphaelBBgccugPresent() === true) {
                 self.destroy();
                 throw new Error("Can't get boundary box for text (is your container hidden? See #135)");
             }
@@ -2553,9 +2553,9 @@
          * @return true/false
          *
          * Wants to override this behavior? Use prototype overriding:
-         *     $.mapael.prototype.isRaphaelBBaz9ugPresent = function() {return false;};
+         *     $.mapael.prototype.isRaphaelBBgccugPresent = function() {return false;};
          */
-        isRaphaelBBaz9ugPresent: function() {
+        isRaphaelBBgccugPresent: function() {
             var self = this;
             // Draw text, then get its boundaries
             var textElem = self.paper.text(-50, -50, "TEST");
