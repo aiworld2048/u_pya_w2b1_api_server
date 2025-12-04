@@ -717,6 +717,7 @@
             const chatListEl = document.getElementById('chatNotificationList');
             const chatCenterUrl = @json(route('admin.chat.index'));
             const CHAT_MAX_CHAT_ITEMS = 10;
+            let audioUnlocked = false;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const markReadUrl = @json($markReadRoute);
             const unreadUrl = @json($unreadRoute);
@@ -748,16 +749,48 @@
                     return;
                 }
 
-                try {
-                    audioElement.currentTime = 0;
-                    audioElement.play();
-                } catch (error) {
-                    // ignore autoplay restrictions
+                audioElement.currentTime = 0;
+                const playPromise = audioElement.play();
+
+                if (playPromise?.catch) {
+                    playPromise.catch(() => {
+                        /* ignored - autoplay restrictions */
+                    });
                 }
             };
 
             const playNotificationSound = () => playSound(audioEl);
             const playChatSound = () => playSound(chatAudioEl);
+
+            const attemptUnlockAudio = () => {
+                if (audioUnlocked) {
+                    return;
+                }
+
+                const unlock = (element) => {
+                    if (!element) {
+                        return Promise.resolve();
+                    }
+
+                    element.muted = true;
+                    return element.play()
+                        .then(() => {
+                            element.pause();
+                            element.currentTime = 0;
+                            element.muted = false;
+                        })
+                        .catch(() => {
+                            element.muted = false;
+                        });
+                };
+
+                Promise.all([unlock(audioEl), unlock(chatAudioEl)]).finally(() => {
+                    audioUnlocked = true;
+                });
+            };
+
+            document.addEventListener('click', attemptUnlockAudio, { once: true });
+            document.addEventListener('touchstart', attemptUnlockAudio, { once: true });
 
             const setChatBadgeValue = (value) => {
                 if (!chatCountEl) {
