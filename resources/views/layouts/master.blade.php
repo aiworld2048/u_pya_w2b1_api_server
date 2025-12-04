@@ -211,7 +211,6 @@
                     </li>
                         </ul>
                     </li>
-                    <audio id="notificationSound" src="{{ asset('sounds/noti.wav') }}" preload="auto" class="d-none"></audio>
                 @endcan
 
                 @if ($isAgentUser)
@@ -277,6 +276,9 @@
                         </ul>
                     </li>
                 @endif
+
+                <audio id="notificationSound" src="{{ asset('sounds/noti.wav') }}" preload="auto" class="d-none"></audio>
+                <audio id="chatNotificationSound" src="{{ asset('sounds/livechat.mp3') }}" preload="auto" class="d-none"></audio>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link"
@@ -706,6 +708,7 @@
             const notificationServer = @json($notificationServer);
             const authUserId = @json(auth()->id());
             const audioEl = document.getElementById('notificationSound');
+            const chatAudioEl = document.getElementById('chatNotificationSound');
             const depositListEl = document.getElementById('depositNotificationList');
             const withdrawListEl = document.getElementById('withdrawNotificationList');
             const depositCountEl = document.getElementById('depositNotificationCount');
@@ -736,18 +739,21 @@
                 },
             };
 
-            const playNotificationSound = () => {
-                if (!audioEl) {
+            const playSound = (audioElement) => {
+                if (!audioElement) {
                     return;
                 }
 
                 try {
-                    audioEl.currentTime = 0;
-                    audioEl.play();
+                    audioElement.currentTime = 0;
+                    audioElement.play();
                 } catch (error) {
                     // ignore autoplay restrictions
                 }
             };
+
+            const playNotificationSound = () => playSound(audioEl);
+            const playChatSound = () => playSound(chatAudioEl);
 
             const updateBadge = (type, value) => {
                 const target = listMap[type]?.count;
@@ -907,12 +913,21 @@
                 });
 
                 socket.on('receive_noti', function(payload) {
-                    const type = payload?.notification_data?.type || payload?.type || 'deposit';
-                    const normalizedType = type === 'withdraw' ? 'withdraw' : 'deposit';
+                    const type = (payload?.notification_data?.type || payload?.type || 'deposit').toLowerCase();
                     const message = payload?.body
                         || payload?.notification_data?.message
-                        || payload?.notification_data?.body;
+                        || payload?.notification_data?.body
+                        || 'You have a new notification.';
 
+                    if (type === 'chat') {
+                        playChatSound();
+                        fetchUnreadNotifications();
+                        window.dispatchEvent(new CustomEvent('chat-notification', { detail: payload }));
+                        showToast('chat', message);
+                        return;
+                    }
+
+                    const normalizedType = type === 'withdraw' ? 'withdraw' : 'deposit';
                     playNotificationSound();
                     showToast(normalizedType, message);
                     fetchUnreadNotifications();
