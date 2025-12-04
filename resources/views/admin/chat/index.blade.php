@@ -181,6 +181,16 @@
             let currentPlayerId = null;
             let isModalVisible = false;
 
+            const syncNavBadge = () => {
+                const total = Array.from(playerTriggers.values()).reduce((sum, button) => {
+                    return sum + Number(button.dataset.unreadCount ?? 0);
+                }, 0);
+
+                window.dispatchEvent(new CustomEvent('chat-sync-badge', {
+                    detail: { count: total },
+                }));
+            };
+
             const jqueryModal = window.$ && window.$.fn && typeof window.$('#chatModal').modal === 'function'
                 ? window.$('#chatModal')
                 : null;
@@ -316,6 +326,8 @@
                     badge.dataset.count = '0';
                     badge.classList.add('d-none');
                 }
+
+                syncNavBadge();
             };
 
             const incrementPlayerBadge = (playerId, delta = 1) => {
@@ -385,6 +397,8 @@
                     openChatModal(playerId, button.dataset.playerName);
                 });
             });
+
+            syncNavBadge();
 
             refreshBtn?.addEventListener('click', () => loadMessages());
 

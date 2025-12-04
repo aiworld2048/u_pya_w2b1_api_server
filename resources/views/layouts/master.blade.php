@@ -713,6 +713,10 @@
             const withdrawListEl = document.getElementById('withdrawNotificationList');
             const depositCountEl = document.getElementById('depositNotificationCount');
             const withdrawCountEl = document.getElementById('withdrawNotificationCount');
+            const chatCountEl = document.getElementById('chatNotificationCount');
+            const chatListEl = document.getElementById('chatNotificationList');
+            const chatCenterUrl = @json(route('admin.chat.index'));
+            const CHAT_MAX_CHAT_ITEMS = 10;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const markReadUrl = @json($markReadRoute);
             const unreadUrl = @json($unreadRoute);
@@ -722,16 +726,6 @@
             const currentNotifications = {
                 deposit: [],
                 withdraw: [],
-            };
-
-            const incrementChatBadge = (delta = 1) => {
-                const badge = document.getElementById('chatNotificationCount');
-                if (!badge) {
-                    return;
-                }
-
-                const nextValue = Math.max(0, Number(badge.textContent || 0) + delta);
-                badge.textContent = nextValue;
             };
 
             const listMap = {
@@ -764,6 +758,88 @@
 
             const playNotificationSound = () => playSound(audioEl);
             const playChatSound = () => playSound(chatAudioEl);
+
+            const setChatBadgeValue = (value) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const sanitized = Math.max(0, Number(value) || 0);
+                chatCountEl.textContent = sanitized;
+            };
+
+            const incrementChatBadge = (delta = 1) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const current = Number(chatCountEl.textContent || 0);
+                setChatBadgeValue(current + delta);
+            };
+
+            const decrementChatBadge = (delta = 1) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const current = Number(chatCountEl.textContent || 0);
+                setChatBadgeValue(current - delta);
+            };
+
+            const appendChatNotification = (payload) => {
+                if (!chatListEl) {
+                    return;
+                }
+
+                const data = payload?.notification_data ?? {};
+                const playerName = data.player_user_name ?? payload?.title ?? 'Player';
+                const messageBody = payload?.body ?? data.message ?? 'New chat message';
+                const createdAt = data.created_at ?? '';
+
+                const emptyState = chatListEl.querySelector('[data-chat-empty-state]');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+
+                const item = document.createElement('a');
+                item.href = chatCenterUrl;
+                item.className = 'dropdown-item py-2 border-bottom d-block text-reset';
+                item.dataset.chatItem = 'true';
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-dark">${playerName}</strong>
+                        <small class="text-muted">${createdAt}</small>
+                    </div>
+                    <small class="text-secondary d-block">${messageBody}</small>
+                `;
+
+                chatListEl.prepend(item);
+
+                const chatItems = chatListEl.querySelectorAll('[data-chat-item]');
+                if (chatItems.length > CHAT_MAX_CHAT_ITEMS) {
+                    Array.from(chatItems)
+                        .slice(CHAT_MAX_CHAT_ITEMS)
+                        .forEach((node) => node.remove());
+                }
+            };
+
+            const setChatBadge = (value) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const sanitized = Math.max(0, Number(value) || 0);
+                chatCountEl.textContent = sanitized;
+            };
+
+            const incrementChatBadge = (delta = 1) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const current = Number(chatCountEl.textContent || 0);
+                setChatBadge(current + delta);
+            };
 
             const updateBadge = (type, value) => {
                 const target = listMap[type]?.count;
@@ -932,6 +1008,7 @@
                     if (type === 'chat') {
                         playChatSound();
                         incrementChatBadge(1);
+                        appendChatNotification(payload);
                         window.dispatchEvent(new CustomEvent('chat-notification', { detail: payload }));
                         showToast('chat', message);
                         return;
@@ -947,6 +1024,13 @@
                     console.warn('Disconnected from notification server');
                 });
             }
+
+            window.addEventListener('chat-sync-badge', (event) => {
+                setChatBadge(event.detail?.count ?? 0);
+            });
+            window.addEventListener('chat-read', () => {
+                decrementChatBadge(1);
+            });
         });
     </script>
 
