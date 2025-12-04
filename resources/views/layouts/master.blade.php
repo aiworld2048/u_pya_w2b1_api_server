@@ -823,24 +823,6 @@
                 }
             };
 
-            const setChatBadge = (value) => {
-                if (!chatCountEl) {
-                    return;
-                }
-
-                const sanitized = Math.max(0, Number(value) || 0);
-                chatCountEl.textContent = sanitized;
-            };
-
-            const incrementChatBadge = (delta = 1) => {
-                if (!chatCountEl) {
-                    return;
-                }
-
-                const current = Number(chatCountEl.textContent || 0);
-                setChatBadge(current + delta);
-            };
-
             const updateBadge = (type, value) => {
                 const target = listMap[type]?.count;
                 if (!target) {
