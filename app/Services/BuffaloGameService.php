@@ -15,14 +15,14 @@ class BuffaloGameService
      * Kept as constants for backward compatibility
      * IMPORTANT: site_url is used for token generation, lobby_url is for redirects
      */
-    private const SITE_NAME = 'AZM999';
+    private const SITE_NAME = 'W2B1';
     private const SITE_PREFIX = 'gcc';
-    private const SITE_URL = 'https://master.azm999.com'; // Used for token generation - must match provider config
-    private const SITE_LOBBY_URL = ''; // Used for lobby redirects https://online.azm999.com
+    private const SITE_URL = 'https://goldencitycasino123.pro'; // Used for token generation - must match provider config
+    private const SITE_LOBBY_URL = ''; // Used for lobby redirects https://online.W2B1.com
 
     /**
      * Resolve site configuration for the provided prefix.
-     * IMPORTANT: For 'az9' prefix, site_url MUST be 'https://master.azm999.com' for token generation
+     * IMPORTANT: For 'az9' prefix, site_url MUST be 'https://master.W2B1.com' for token generation
      */
     private static function getResolvedSiteConfig(?string $sitePrefix = null): array
     {
@@ -52,13 +52,13 @@ class BuffaloGameService
                     // CRITICAL FIX: Force correct site_url for 'az9' prefix (must match provider config)
                     if (strtolower($targetPrefix) === 'az9') {
                         $originalSiteUrl = $resolvedConfig['site_url'] ?? 'not set';
-                        $resolvedConfig['site_url'] = 'https://master.azm999.com';
-                        if ($originalSiteUrl !== 'https://master.azm999.com') {
-                            // Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix', [
-                            //     'original_site_url' => $originalSiteUrl,
-                            //     'corrected_site_url' => 'https://master.azm999.com',
-                            //     'reason' => 'Token generation must match provider config'
-                            // ]);
+                        $resolvedConfig['site_url'] = 'https://goldencitycasino123.pro';
+                        if ($originalSiteUrl !== 'https://goldencitycasino123.pro') {
+                            Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix', [
+                                'original_site_url' => $originalSiteUrl,
+                                'corrected_site_url' => 'https://goldencitycasino123.pro',
+                                'reason' => 'Token generation must match provider config'
+                            ]);
                         }
                     }
                     
@@ -74,13 +74,13 @@ class BuffaloGameService
         // CRITICAL FIX: Force correct site_url for 'az9' prefix (must match provider config)
         if (strtolower($default['prefix']) === 'az9') {
             $originalSiteUrl = $default['site_url'] ?? 'not set';
-            $default['site_url'] = 'https://master.azm999.com';
-            if ($originalSiteUrl !== 'https://master.azm999.com') {
-                // Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix (default)', [
-                //     'original_site_url' => $originalSiteUrl,
-                //     'corrected_site_url' => 'https://master.azm999.com',
-                //     'reason' => 'Token generation must match provider config'
-                // ]);
+            $default['site_url'] = 'https://goldencitycasino123.pro';
+            if ($originalSiteUrl !== 'https://goldencitycasino123.pro') {
+                Log::warning('Buffalo Game Service - Overriding site_url for az9 prefix (default)', [
+                    'original_site_url' => $originalSiteUrl,
+                    'corrected_site_url' => 'https://goldencitycasino123.pro',
+                    'reason' => 'Token generation must match provider config'
+                ]);
             }
         }
 
@@ -99,7 +99,7 @@ class BuffaloGameService
         $encoded = rtrim(strtr(base64_encode($userName), '+/', '-_'), '=');
         
         // Create a 32-character UID: prefix + encoded username + hash padding
-        $prefix = $siteConfig['prefix']; // e.g. "AZM999"
+        $prefix = $siteConfig['prefix']; // e.g. "W2B1"
         $remaining = 32 - strlen($prefix);
         
         // If encoded username is longer than available space, use hash instead
@@ -146,7 +146,7 @@ class BuffaloGameService
             $userName = self::extractUserNameFromUid($uid);
             
             if (!$userName) {
-                Log::warning('AZM999 Buffalo - Could not extract username from UID', [
+                Log::warning('W2B1 Buffalo - Could not extract username from UID', [
                     'uid' => $uid,
                     'uid_length' => strlen($uid)
                 ]);
@@ -157,7 +157,7 @@ class BuffaloGameService
             $user = User::where('user_name', $userName)->first();
             
             if (!$user) {
-                Log::warning('AZM999 Buffalo - User not found for token verification', [
+                Log::warning('W2B1 Buffalo - User not found for token verification', [
                     'userName' => $userName,
                     'uid' => $uid
                 ]);
@@ -183,7 +183,7 @@ class BuffaloGameService
             $uidMatches = ($uid === $expectedUid || strtolower($uid) === strtolower($expectedUid));
 
             if ($isValid) {
-                Log::info('AZM999 Buffalo - Token verified successfully', [
+                Log::info('W2B1 Buffalo - Token verified successfully', [
                     'user' => $userName,
                     'uid_match' => $uidMatches,
                     'uid_received' => $uid,
@@ -191,7 +191,7 @@ class BuffaloGameService
                     'site_prefix' => $sitePrefix,
                 ]);
             } else {
-                Log::warning('AZM999 Buffalo - Token verification failed', [
+                Log::warning('W2B1 Buffalo - Token verification failed', [
                     'user' => $userName,
                     'site' => $siteConfig['name'] ?? 'Unknown',
                     'prefix' => $sitePrefix ?? 'default',
@@ -208,7 +208,7 @@ class BuffaloGameService
             return $isValid;
 
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo - Token verification error', [
+            Log::error('W2B1 Buffalo - Token verification error', [
                 'error' => $e->getMessage(),
                 'uid' => $uid,
                 'trace' => $e->getTraceAsString()
@@ -261,7 +261,7 @@ class BuffaloGameService
         
         // Validate UID starts with prefix
         if (substr($uid, 0, $prefixLength) !== $prefix) {
-            Log::warning('AZM999 Buffalo - UID does not start with expected prefix', [
+            Log::warning('W2B1 Buffalo - UID does not start with expected prefix', [
                 'uid' => $uid,
                 'expected_prefix' => $prefix,
                 'actual_prefix' => substr($uid, 0, $prefixLength)
@@ -293,7 +293,7 @@ class BuffaloGameService
                         // Check if this username exists (use cleaned string)
                         $user = User::where('user_name', $cleaned)->first();
                         if ($user) {
-                            Log::info('AZM999 Buffalo - Successfully extracted username from UID', [
+                            Log::info('W2B1 Buffalo - Successfully extracted username from UID', [
                                 'uid' => $uid,
                                 'extracted_username' => $cleaned
                             ]);
@@ -303,7 +303,7 @@ class BuffaloGameService
                         // Also try case-insensitive match
                         $user = User::whereRaw('LOWER(user_name) = ?', [strtolower($cleaned)])->first();
                         if ($user) {
-                            Log::info('AZM999 Buffalo - Successfully extracted username from UID (case-insensitive)', [
+                            Log::info('W2B1 Buffalo - Successfully extracted username from UID (case-insensitive)', [
                                 'uid' => $uid,
                                 'extracted_username' => $user->user_name,
                                 'matched_cleaned' => $cleaned
@@ -314,7 +314,7 @@ class BuffaloGameService
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('AZM999 Buffalo - Failed to decode UID', [
+            Log::warning('W2B1 Buffalo - Failed to decode UID', [
                 'uid' => $uid,
                 'error' => $e->getMessage()
             ]);
@@ -324,7 +324,7 @@ class BuffaloGameService
         // This is more reliable but slower - use caching if needed
         // Also handle case-insensitive matching (game server might lowercase UID)
         try {
-            Log::info('AZM999 Buffalo - Using fallback UID search', [
+            Log::info('W2B1 Buffalo - Using fallback UID search', [
                 'uid' => $uid,
                 'uid_length' => strlen($uid)
             ]);
@@ -341,7 +341,7 @@ class BuffaloGameService
                     $generatedUid = self::generateUid($user->user_name);
                     // Case-sensitive match first (most common)
                     if ($generatedUid === $uid) {
-                        Log::info('AZM999 Buffalo - Found username via fallback search (exact match)', [
+                        Log::info('W2B1 Buffalo - Found username via fallback search (exact match)', [
                             'uid' => $uid,
                             'username' => $user->user_name
                         ]);
@@ -349,7 +349,7 @@ class BuffaloGameService
                     }
                     // Case-insensitive match (game server might lowercase UID in URL)
                     if (strtolower($generatedUid) === strtolower($uid)) {
-                        Log::info('AZM999 Buffalo - Found username via fallback search (case-insensitive match)', [
+                        Log::info('W2B1 Buffalo - Found username via fallback search (case-insensitive match)', [
                             'uid' => $uid,
                             'generated_uid' => $generatedUid,
                             'username' => $user->user_name,
@@ -360,13 +360,13 @@ class BuffaloGameService
                 }
             }
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo - Error in fallback UID search', [
+            Log::error('W2B1 Buffalo - Error in fallback UID search', [
                 'uid' => $uid,
                 'error' => $e->getMessage()
             ]);
         }
 
-        Log::warning('AZM999 Buffalo - Could not extract username from UID', [
+        Log::warning('W2B1 Buffalo - Could not extract username from UID', [
             'uid' => $uid,
             'uid_length' => strlen($uid),
             'prefix' => $prefix
@@ -455,7 +455,7 @@ class BuffaloGameService
         $gameId = 23; // Buffalo game ID from provider examples
         
         // Use provided lobby URL or default to production site
-        $finalLobbyUrl = $lobbyUrl ?: 'https://online.azm999.com';
+        $finalLobbyUrl = $lobbyUrl ?: 'https://online.W2B1.com';
         
         // Generate the base URL without auth (auth will be added by controller)
         $gameUrl = $baseUrl . '?gameId=' . $gameId . 

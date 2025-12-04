@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
         $owner = $this->createUser(
             UserType::Owner,
             'Owner',
-            'AZM999',
+            'W2B1',
             '09123456789',
             null,
             'OWNER'.Str::random(6)
@@ -44,7 +44,7 @@ class UsersTableSeeder extends Seeder
             'AZMAG',
             '0911234561',
             $owner->id,
-            'AZM999AG'
+            'W2B1AG'
         );
         $walletService->transfer($owner, $agentK, 2_000_000, TransactionName::CreditTransfer);
 
@@ -127,7 +127,7 @@ class UsersTableSeeder extends Seeder
             'name' => $name,
             'user_name' => $user_name,
             'phone' => $phone,
-            'password' => Hash::make('azm999vip'),
+            'password' => Hash::make('W2B1vip'),
             'agent_id' => $parent_id,
             'status' => 1,
             'is_changed_password' => 1,

@@ -86,7 +86,7 @@ class LaunchGameController extends Controller
         $agentCode = config('seamless_key.agent_code');
         $secretKey = config('seamless_key.secret_key');
         $apiUrl = config('seamless_key.api_url').'/api/operators/launch-game';
-        $operatorLobbyUrl = 'https://online.azm999.com';
+        $operatorLobbyUrl = 'https://online.W2B1.com';
         $requestTime = now('Asia/Shanghai')->timestamp;
 
         $generatedSignature = md5($requestTime.$secretKey.'launchgame'.$agentCode);

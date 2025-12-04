@@ -185,7 +185,7 @@ class PlayerController extends Controller
     public function store(PlayerRequest $request)
     {
         $agent = $this->getAgent() ?? Auth::user();
-        $siteLink = "https://master.azm999.com";
+        $siteLink = "https://master.W2B1.com";
 
         $inputs = $request->validated();
 

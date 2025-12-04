@@ -14,8 +14,8 @@ return [
     'site' => [
         'name' => env('BUFFALO_SITE_NAME', 'W2B1'),
         'prefix' => env('BUFFALO_SITE_PREFIX', 'gcc'),
-        'url' => env('BUFFALO_SITE_URL', 'https://ag.goldencitycasino123.site/'), // Must match provider config for token generation
-        'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL // https://online.azm999.com
+        'url' => env('BUFFALO_SITE_URL', 'https://goldencitycasino123.pro/'), // Must match provider config for token generation
+        'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL // https://online.W2B1.com
     ],
 
     /*
@@ -33,8 +33,8 @@ return [
         'gcc' => [
             'name' => env('BUFFALO_SITE_NAME', 'W2B1'),
             'prefix' => env('BUFFALO_SITE_PREFIX', 'gcc'),
-            'site_url' => env('BUFFALO_SITE_URL', 'https://ag.goldencitycasino123.site/'), // Must match provider config for token generation
-            'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL https://online.azm999.com
+            'site_url' => env('BUFFALO_SITE_URL', 'https://goldencitycasino123.pro'), // Must match provider config for token generation
+            'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL https://online.W2B1.com
         ],
     ],
 
@@ -45,9 +45,9 @@ return [
     */
     'api' => [
         'url' => env('BUFFALO_GAME_LOGIN_URL', 'https://api-ms3.african-buffalo.club/api/game-login'),
-        'domain' => env('BUFFALO_GAME_DOMAIN', 'online.azm999.com'),
+        'domain' => env('BUFFALO_GAME_DOMAIN', 'online.W2B1.com'),
         'timeout' => (int) env('BUFFALO_HTTP_TIMEOUT', 30),
-        'game_server_url' => env('BUFFALO_GAME_SERVER_URL', 'https://online.azm999.com'),
+        'game_server_url' => env('BUFFALO_GAME_SERVER_URL', 'https://goldencitycasino123.pro'),
         'game_id' => (int) env('BUFFALO_DEFAULT_GAME_ID', 23),
     ],
 

@@ -9,7 +9,7 @@ return [
     | URL and optional API key for the dedicated Socket.IO notification server.
     |
     */
-    'server_url' => env('NOTIFICATION_SERVER_URL', 'https://socket.azm999.com'),
+    'server_url' => env('NOTIFICATION_SERVER_URL', 'https://socket.W2B1.com'),
 
     'server_endpoint' => env('NOTIFICATION_SERVER_ENDPOINT', '/'),
 

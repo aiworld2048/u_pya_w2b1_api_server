@@ -443,7 +443,7 @@ var decToHex = function(dec, bytes) {
  *
  * adapted from http://unix.stackexchange.com/questions/14705/the-zip-formats-external-file-attribute :
  *
- * AZM999Tsstrwxrwxrwx0000000000ADVSHR
+ * W2B1Tsstrwxrwxrwx0000000000ADVSHR
  * ^^^^____________________________ file type, see zipinfo.c (UNX_*)
  *     ^^^_________________________ setuid, setgid, sticky
  *        ^^^^^^^^^________________ permissions

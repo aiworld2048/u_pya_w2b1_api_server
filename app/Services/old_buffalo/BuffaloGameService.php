@@ -10,9 +10,9 @@ class BuffaloGameService
     /**
      * Site configuration for TriBet
      */
-    private const SITE_NAME = 'https://master.azm999.com';
+    private const SITE_NAME = 'https://master.W2B1.com';
     private const SITE_PREFIX = 'az9'; // az9
-    private const SITE_URL = 'https://master.azm999.com';
+    private const SITE_URL = 'https://master.W2B1.com';
 
     /**
      * Generate UID (32 characters) for Buffalo API
@@ -68,7 +68,7 @@ class BuffaloGameService
             $userName = self::extractUserNameFromUid($uid);
             
             if (!$userName) {
-                Log::warning('AZM999 Buffalo - Could not extract username from UID', [
+                Log::warning('W2B1 Buffalo - Could not extract username from UID', [
                     'uid' => $uid
                 ]);
                 return false;
@@ -78,7 +78,7 @@ class BuffaloGameService
             $user = User::where('user_name', $userName)->first();
             
             if (!$user) {
-                Log::warning('AZM999 Buffalo - User not found for token verification', [
+                Log::warning('W2B1 Buffalo - User not found for token verification', [
                     'userName' => $userName
                 ]);
                 return false;
@@ -90,11 +90,11 @@ class BuffaloGameService
             $isValid = hash_equals($expectedToken, $token);
 
             if ($isValid) {
-                Log::info('AZM999 Buffalo - Token verified successfully', [
+                Log::info('W2B1 Buffalo - Token verified successfully', [
                     'user' => $userName
                 ]);
             } else {
-                Log::warning('AZM999 Buffalo - Token verification failed', [
+                Log::warning('W2B1 Buffalo - Token verification failed', [
                     'user' => $userName,
                     'expected' => substr($expectedToken, 0, 10) . '...',
                     'received' => substr($token, 0, 10) . '...'
@@ -104,7 +104,7 @@ class BuffaloGameService
             return $isValid;
 
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo - Token verification error', [
+            Log::error('W2B1 Buffalo - Token verification error', [
                 'error' => $e->getMessage(),
                 'uid' => $uid
             ]);
@@ -146,7 +146,7 @@ class BuffaloGameService
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('AZM999 Buffalo - Failed to decode UID', [
+            Log::warning('W2B1 Buffalo - Failed to decode UID', [
                 'uid' => $uid,
                 'error' => $e->getMessage()
             ]);
@@ -162,7 +162,7 @@ class BuffaloGameService
                 }
             }
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo - Error in fallback UID search', [
+            Log::error('W2B1 Buffalo - Error in fallback UID search', [
                 'uid' => $uid,
                 'error' => $e->getMessage()
             ]);
@@ -221,7 +221,7 @@ class BuffaloGameService
         $gameId = 23; // Buffalo game ID from provider examples
         
         // Use provided lobby URL or default to production site
-        $finalLobbyUrl = $lobbyUrl ?: 'https://online.azm999.com';
+        $finalLobbyUrl = $lobbyUrl ?: 'https://online.W2B1.com';
         
         // Generate the base URL without auth (auth will be added by controller)
         $gameUrl = $baseUrl . '?gameId=' . $gameId . 

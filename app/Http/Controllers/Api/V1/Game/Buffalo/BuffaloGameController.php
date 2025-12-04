@@ -28,7 +28,7 @@ class BuffaloGameController extends Controller
      */
     public function getUserBalance(Request $request)
     {
-        Log::info('AZM999 Buffalo getUserBalance - Request received', [
+        Log::info('W2B1 Buffalo getUserBalance - Request received', [
             'request' => $request->all(),
             'ip' => $request->ip()
         ]);
@@ -42,7 +42,7 @@ class BuffaloGameController extends Controller
         $token = $request->token;
 
         // Log received payload for debugging
-        Log::info('AZM999 Buffalo getUserBalance - Payload received', [
+        Log::info('W2B1 Buffalo getUserBalance - Payload received', [
             'received_uid' => $uid,
             'received_token' => substr($token, 0, 20) . '...' . substr($token, -10), // Show first 20 and last 10 chars
             'token_length' => strlen($token),
@@ -58,7 +58,7 @@ class BuffaloGameController extends Controller
             $expectedToken = BuffaloGameService::generatePersistentToken($userName);
             
             // Log expected values for debugging
-            Log::info('AZM999 Buffalo getUserBalance - Expected values', [
+            Log::info('W2B1 Buffalo getUserBalance - Expected values', [
                 'extracted_username' => $userName,
                 'expected_uid' => $expectedUid,
                 'expected_token' => substr($expectedToken, 0, 20) . '...' . substr($expectedToken, -10),
@@ -66,19 +66,19 @@ class BuffaloGameController extends Controller
                 'token_match' => hash_equals($expectedToken, $token),
             ]);
         } else {
-            Log::warning('AZM999 Buffalo getUserBalance - Could not extract username from UID', [
+            Log::warning('W2B1 Buffalo getUserBalance - Could not extract username from UID', [
                 'received_uid' => $uid,
             ]);
         }
 
         // Verify token
-        Log::info('AZM999 Buffalo - Token verification attempt', [
+        Log::info('W2B1 Buffalo - Token verification attempt', [
             'uid' => $uid,
             'token_preview' => substr($token, 0, 20) . '...'
         ]);
         
         if (!BuffaloGameService::verifyToken($uid, $token)) {
-            Log::warning('AZM999 Buffalo - Token verification failed', [
+            Log::warning('W2B1 Buffalo - Token verification failed', [
                 'uid' => $uid,
                 'received_token' => substr($token, 0, 20) . '...' . substr($token, -10),
                 'extracted_username' => $userName ?? 'N/A',
@@ -90,13 +90,13 @@ class BuffaloGameController extends Controller
             ]);
         }
         
-        Log::info('AZM999 Buffalo - Token verification successful', [
+        Log::info('W2B1 Buffalo - Token verification successful', [
             'uid' => $uid,
             'username' => $userName
         ]);
 
         if (!$userName) {
-            Log::warning('AZM999 Buffalo - Could not extract username', [
+            Log::warning('W2B1 Buffalo - Could not extract username', [
                 'uid' => $uid
             ]);
             
@@ -110,7 +110,7 @@ class BuffaloGameController extends Controller
         $user = User::where('user_name', $userName)->first();
         
         if (!$user) {
-            Log::warning('AZM999 Buffalo - User not found', [
+            Log::warning('W2B1 Buffalo - User not found', [
                 'userName' => $userName,
                 'uid' => $uid
             ]);
@@ -124,7 +124,7 @@ class BuffaloGameController extends Controller
         // Get balance (assuming you use bavix/laravel-wallet)
         $balance = $user->balanceFloat;
 
-        Log::info('AZM999 Buffalo - Balance retrieved successfully', [
+        Log::info('W2B1 Buffalo - Balance retrieved successfully', [
             'user' => $userName,
             'balance' => $balance
         ]);
@@ -143,7 +143,7 @@ class BuffaloGameController extends Controller
      */
     public function changeBalance(Request $request)
     {
-        Log::info('AZM999 Buffalo changeBalance - Request received', [
+        Log::info('W2B1 Buffalo changeBalance - Request received', [
             'request' => $request->all(),
             'ip' => $request->ip()
         ]);
@@ -171,7 +171,7 @@ class BuffaloGameController extends Controller
         $roomId = $request->roomId ?? $request->roomld ?? null;
 
         // Log received payload for debugging
-        Log::info('AZM999 Buffalo changeBalance - Payload received', [
+        Log::info('W2B1 Buffalo changeBalance - Payload received', [
             'received_uid' => $uid,
             'received_token' => substr($token, 0, 20) . '...' . substr($token, -10), // Show first 20 and last 10 chars
             'token_length' => strlen($token),
@@ -193,7 +193,7 @@ class BuffaloGameController extends Controller
             $expectedToken = BuffaloGameService::generatePersistentToken($userName);
             
             // Log expected values for debugging
-            Log::info('AZM999 Buffalo changeBalance - Expected values', [
+            Log::info('W2B1 Buffalo changeBalance - Expected values', [
                 'extracted_username' => $userName,
                 'expected_uid' => $expectedUid,
                 'expected_token' => substr($expectedToken, 0, 20) . '...' . substr($expectedToken, -10),
@@ -201,20 +201,20 @@ class BuffaloGameController extends Controller
                 'token_match' => hash_equals($expectedToken, $token),
             ]);
         } else {
-            Log::warning('AZM999 Buffalo changeBalance - Could not extract username from UID', [
+            Log::warning('W2B1 Buffalo changeBalance - Could not extract username from UID', [
                 'received_uid' => $uid,
             ]);
         }
 
         // Verify token
-        Log::info('AZM999 Buffalo - Token verification attempt', [
+        Log::info('W2B1 Buffalo - Token verification attempt', [
             'uid' => $uid,
             'token_preview' => substr($token, 0, 20) . '...',
             'bet_uid' => $betUid
         ]);
         
         if (!BuffaloGameService::verifyToken($uid, $token)) {
-            Log::warning('AZM999 Buffalo - Token verification failed', [
+            Log::warning('W2B1 Buffalo - Token verification failed', [
                 'uid' => $uid,
                 'received_token' => substr($token, 0, 20) . '...' . substr($token, -10),
                 'extracted_username' => $userName ?? 'N/A',
@@ -227,14 +227,14 @@ class BuffaloGameController extends Controller
             ]);
         }
         
-        Log::info('AZM999 Buffalo - Token verification successful', [
+        Log::info('W2B1 Buffalo - Token verification successful', [
             'uid' => $uid,
             'username' => $userName,
             'bet_uid' => $betUid
         ]);
 
         if (!$userName) {
-            Log::warning('AZM999 Buffalo - Could not extract username', [
+            Log::warning('W2B1 Buffalo - Could not extract username', [
                 'uid' => $uid
             ]);
             
@@ -262,7 +262,7 @@ class BuffaloGameController extends Controller
         // Idempotency Check: Prevent duplicate processing using bet_uid
         $existingBet = LogBuffaloBet::where('bet_uid', $betUid)->first();
         if ($existingBet) {
-            Log::info('AZM999 Buffalo - Duplicate bet_uid detected, returning existing result', [
+            Log::info('W2B1 Buffalo - Duplicate bet_uid detected, returning existing result', [
                 'bet_uid' => $betUid,
                 'user' => $user->user_name
             ]);
@@ -282,7 +282,7 @@ class BuffaloGameController extends Controller
         $betAmount = abs((int) $request->bet);
         $winAmount = (int) $request->win;
 
-        Log::info('AZM999 Buffalo - Processing transaction', [
+        Log::info('W2B1 Buffalo - Processing transaction', [
             'user_name' => $user->user_name,
             'user_id' => $user->id,
             'bet_uid' => $betUid,
@@ -334,7 +334,7 @@ class BuffaloGameController extends Controller
             if (!$success) {
                 DB::rollBack();
                 
-                Log::error('AZM999 Buffalo - Wallet transaction failed', [
+                Log::error('W2B1 Buffalo - Wallet transaction failed', [
                     'user_id' => $user->id,
                     'user_name' => $user->user_name,
                     'change_amount' => $changeAmount
@@ -349,7 +349,7 @@ class BuffaloGameController extends Controller
             // Refresh user model
             $user->refresh();
 
-            Log::info('AZM999 Buffalo - Transaction successful', [
+            Log::info('W2B1 Buffalo - Transaction successful', [
                 'user_id' => $user->id,
                 'user_name' => $user->user_name,
                 'bet_uid' => $betUid,
@@ -373,7 +373,7 @@ class BuffaloGameController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             
-            Log::error('AZM999 Buffalo - Transaction error', [
+            Log::error('W2B1 Buffalo - Transaction error', [
                 'user_name' => $user->user_name,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -409,14 +409,14 @@ class BuffaloGameController extends Controller
                 'balance' => $user->balanceFloat,
             ]);
 
-            Log::info('AZM999 Buffalo - Bet logged successfully', [
+            Log::info('W2B1 Buffalo - Bet logged successfully', [
                 'user' => $user->user_name,
                 'bet_uid' => $betUid,
                 'game_id' => $gameId
             ]);
 
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo - Failed to log bet', [
+            Log::error('W2B1 Buffalo - Failed to log bet', [
                 'error' => $e->getMessage(),
                 'user' => $user->user_name,
                 'bet_uid' => $betUid
@@ -462,7 +462,7 @@ class BuffaloGameController extends Controller
      */
     private function resolveSitePrefix(?string $sitePrefix): string
     {
-        $defaultPrefix = Config::get('buffalo.site.prefix', 'AZM999');
+        $defaultPrefix = Config::get('buffalo.site.prefix', 'W2B1');
 
         if (!$sitePrefix) {
             return $defaultPrefix;
@@ -514,7 +514,7 @@ class BuffaloGameController extends Controller
         $typeId = (int) ($request->input('type_id') ?? Config::get('buffalo.provider_launch.type_id', 1));
         $providerId = (int) ($request->input('provider_id') ?? Config::get('buffalo.provider_launch.provider_id', 23));
         //$lobbyUrl = $request->input('lobby_url') ?? BuffaloGameService::getLobbyUrl($sitePrefix);
-        $lobbyUrl = Config::get('buffalo.site.lobby_url', ''); // https://online.azm999.com
+        $lobbyUrl = Config::get('buffalo.site.lobby_url', ''); // https://online.W2B1.com
 
         // Check if user has sufficient balance for the room
         $availableRooms = BuffaloGameService::getAvailableRooms($user);
@@ -633,12 +633,12 @@ class BuffaloGameController extends Controller
                 $typeId = (int) $request->type_id;
 
                 //$lobbyUrl = BuffaloGameService::getLobbyUrl($sitePrefix);
-                $lobbyUrl = Config::get('buffalo.site.lobby_url', ''); // https://online.azm999.com
+                $lobbyUrl = Config::get('buffalo.site.lobby_url', ''); // https://online.W2B1.com
                 $returnGameUrl = $lobbyUrl;
                 
 
                 // Log request payload for debugging
-                Log::info('AZM999 Buffalo Game Launch - Request payload', [
+                Log::info('W2B1 Buffalo Game Launch - Request payload', [
                     'user_id' => $user->id,
                     'user_name' => $user->user_name,
                     'type_id' => $typeId,
@@ -681,7 +681,7 @@ class BuffaloGameController extends Controller
                     ]);
                 }
                 
-                // Log::info('AZM999 Buffalo Game Launch - Success', [
+                // Log::info('W2B1 Buffalo Game Launch - Success', [
                 //     'user_id' => $user->id,
                 //     'user_name' => $user->user_name,
                 //     'room_id' => $roomId,
@@ -714,7 +714,7 @@ class BuffaloGameController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('AZM999 Buffalo Game Launch Error', [
+            Log::error('W2B1 Buffalo Game Launch Error', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
