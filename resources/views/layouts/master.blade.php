@@ -724,6 +724,16 @@
                 withdraw: [],
             };
 
+            const incrementChatBadge = (delta = 1) => {
+                const badge = document.getElementById('chatNotificationCount');
+                if (!badge) {
+                    return;
+                }
+
+                const nextValue = Math.max(0, Number(badge.textContent || 0) + delta);
+                badge.textContent = nextValue;
+            };
+
             const listMap = {
                 deposit: {
                     list: depositListEl,
@@ -921,7 +931,7 @@
 
                     if (type === 'chat') {
                         playChatSound();
-                        fetchUnreadNotifications();
+                        incrementChatBadge(1);
                         window.dispatchEvent(new CustomEvent('chat-notification', { detail: payload }));
                         showToast('chat', message);
                         return;
