@@ -67,11 +67,11 @@
                             <form id="chat-form">
                                 <div class="form-group mb-2">
                                     <label for="chat-input" class="sr-only">Message</label>
-                                    <textarea class="form-control" id="chat-input" rows="3" placeholder="Type your message..." {{ $players->isEmpty() ? 'disabled' : '' }}></textarea>
+                                    <textarea class="form-control" id="chat-input" rows="3" placeholder="Type your message..." disabled></textarea>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted" id="chat-form-hint">Messages are private between you and the player.</small>
-                                    <button type="submit" class="btn btn-primary" id="chat-send-btn" {{ $players->isEmpty() ? 'disabled' : '' }}>
+                                    <button type="submit" class="btn btn-primary" id="chat-send-btn" disabled>
                                         <i class="fas fa-paper-plane mr-1"></i>Send
                                     </button>
                                 </div>
@@ -184,6 +184,21 @@
                 errorBox.style.display = 'block';
                 errorBox.textContent = message;
             };
+
+            const toggleComposer = (enabled) => {
+                if (!input || !sendBtn) {
+                    return;
+                }
+
+                input.disabled = !enabled;
+                sendBtn.disabled = !enabled;
+
+                if (!enabled) {
+                    input.value = '';
+                }
+            };
+
+            toggleComposer(false);
 
             const setLoadingState = () => {
                 messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
@@ -326,6 +341,9 @@
 
                 activePlayerId = button.dataset.playerId;
                 activePlayerLabel.textContent = button.dataset.playerName;
+
+                toggleComposer(true);
+                input.focus();
 
                 fetchMessages();
             };
