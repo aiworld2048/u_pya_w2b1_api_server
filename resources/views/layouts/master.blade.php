@@ -245,7 +245,7 @@
                                 <div class="notification-list" id="chatNotificationList">
                                     @forelse ($chatUnreadMessages as $chatMessage)
                                         <a href="{{ route('admin.chat.index') }}"
-                                            class="dropdown-item py-2 border-bottom d-block text-reset">
+                                            class="dropdown-item py-2 border-bottom d-block text-reset" data-chat-item="true">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <strong class="text-dark">
                                                     {{ $chatMessage->sender->user_name ?? $chatMessage->sender->name ?? 'Player' }}
@@ -259,7 +259,7 @@
                                             </small>
                                         </a>
                                     @empty
-                                        <p class="dropdown-item text-center text-muted mb-0">
+                                        <p class="dropdown-item text-center text-muted mb-0" data-chat-empty-state="true">
                                             No unread chat messages
                                         </p>
                                     @endforelse
@@ -710,6 +710,10 @@
             const withdrawListEl = document.getElementById('withdrawNotificationList');
             const depositCountEl = document.getElementById('depositNotificationCount');
             const withdrawCountEl = document.getElementById('withdrawNotificationCount');
+            const chatListEl = document.getElementById('chatNotificationList');
+            const chatCountEl = document.getElementById('chatNotificationCount');
+            const chatCenterUrl = @json(route('admin.chat.index'));
+            const CHAT_MAX_ITEMS = 10;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const markReadUrl = @json($markReadRoute);
             const unreadUrl = @json($unreadRoute);
@@ -889,8 +893,62 @@
                     return;
                 }
 
-                const title = type === 'withdraw' ? 'Withdraw Request' : 'Deposit Request';
+                const titles = {
+                    withdraw: 'Withdraw Request',
+                    deposit: 'Deposit Request',
+                    chat: 'New Chat Message',
+                };
+
+                const title = titles[type] ?? 'Notification';
                 window.toastr.info(message, title);
+            };
+
+            const setChatBadge = (count) => {
+                if (!chatCountEl) {
+                    return;
+                }
+
+                const sanitized = Math.max(0, Number(count) || 0);
+                chatCountEl.textContent = sanitized;
+            };
+
+            const appendChatNotification = (payload) => {
+                if (!chatListEl || !chatCountEl) {
+                    return;
+                }
+
+                const data = payload?.notification_data ?? {};
+                const userName = data.player_user_name ?? payload.title ?? 'Player';
+                const message = payload.body ?? data.message ?? 'New chat message';
+                const createdAt = data.created_at ?? '';
+
+                const emptyState = chatListEl.querySelector('[data-chat-empty-state]');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+
+                const item = document.createElement('a');
+                item.href = chatCenterUrl;
+                item.className = 'dropdown-item py-2 border-bottom d-block text-reset';
+                item.dataset.chatItem = 'true';
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-dark">${userName}</strong>
+                        <small class="text-muted">${createdAt}</small>
+                    </div>
+                    <small class="text-secondary d-block">${message}</small>
+                `;
+
+                chatListEl.prepend(item);
+
+                const items = chatListEl.querySelectorAll('[data-chat-item]');
+                if (items.length > CHAT_MAX_ITEMS) {
+                    Array.from(items)
+                        .slice(CHAT_MAX_ITEMS)
+                        .forEach((node) => node.remove());
+                }
+
+                setChatBadge(Number(chatCountEl.textContent || 0) + 1);
             };
 
             fetchUnreadNotifications();
@@ -907,16 +965,21 @@
                 });
 
                 socket.on('receive_noti', function(payload) {
-                    const type = payload?.notification_data?.type || payload?.type || 'deposit';
-                    const normalizedType = type === 'withdraw' ? 'withdraw' : 'deposit';
+                    const type = (payload?.notification_data?.type || payload?.type || 'deposit').toLowerCase();
                     const message = payload?.body
                         || payload?.notification_data?.message
-                        || payload?.notification_data?.body;
+                        || payload?.notification_data?.body
+                        || 'You have a new notification.';
 
-                    playNotificationSound();
-                    showToast(normalizedType, message);
-                    fetchUnreadNotifications();
-                });
+                    if (type === 'chat') {
+                        playNotificationSound();
+                        appendChatNotification(payload);
+                        showToast('chat', message);
+                        window.dispatchEvent(new CustomEvent('chat-notification', { detail: payload }));
+                        return;
+                    }
+
+                ... (rest)
 
                 socket.on('disconnect', function() {
                     console.warn('Disconnected from notification server');

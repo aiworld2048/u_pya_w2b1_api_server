@@ -180,6 +180,8 @@
 
             let currentPlayerId = null;
             let isModalVisible = false;
+            let liveRefreshTimer = null;
+            const LIVE_REFRESH_INTERVAL = 4000;
 
             const jqueryModal = window.$ && window.$.fn && typeof window.$('#chatModal').modal === 'function'
                 ? window.$('#chatModal')
@@ -370,6 +372,25 @@
                     });
             };
 
+            const startLiveRefresh = () => {
+                if (liveRefreshTimer || !LIVE_REFRESH_INTERVAL) {
+                    return;
+                }
+
+                liveRefreshTimer = setInterval(() => {
+                    if (isModalVisible && currentPlayerId) {
+                        loadMessages();
+                    }
+                }, LIVE_REFRESH_INTERVAL);
+            };
+
+            const stopLiveRefresh = () => {
+                if (liveRefreshTimer) {
+                    clearInterval(liveRefreshTimer);
+                    liveRefreshTimer = null;
+                }
+            };
+
             const openChatModal = (playerId, playerName) => {
                 currentPlayerId = playerId;
                 modalPlayerName.textContent = playerName;
@@ -378,6 +399,7 @@
                 messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
                 showModal();
                 loadMessages();
+                startLiveRefresh();
             };
 
             playerTriggers.forEach((button, playerId) => {
@@ -451,8 +473,10 @@
                     toggleComposer(false);
                     messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Select a player to load messages.</p>';
                     setError();
+                    stopLiveRefresh();
                 } else {
                     input?.focus();
+                    startLiveRefresh();
                 }
             };
 
@@ -469,19 +493,10 @@
                 }
 
                 if (isModalVisible && Number(playerId) === Number(currentPlayerId)) {
-                    const incomingMessage = {
-                        sender_type: data.sender_type ?? 'player',
-                        sender: {
-                            user_name: data.player_user_name ?? payload.title ?? 'Player',
-                        },
-                        message: data.message ?? payload.body ?? '',
-                        created_at: data.created_at ?? new Date().toISOString(),
-                    };
-
-                    appendMessageBubble(incomingMessage);
                     updatePlayerBadge(playerId, 0);
                     notifyChatRead(playerId);
                     setError();
+                    loadMessages();
                 } else {
                     incrementPlayerBadge(playerId, 1);
                 }
