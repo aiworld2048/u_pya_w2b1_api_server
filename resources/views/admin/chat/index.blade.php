@@ -38,15 +38,23 @@
                                         <button type="button"
                                             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center player-chat-trigger"
                                             data-player-id="{{ $player->id }}"
-                                            data-player-name="{{ $player->user_name }}">
+                                            data-player-name="{{ $player->user_name }}"
+                                            data-unread-count="{{ $player->unread_chat_count ?? 0 }}">
                                             <div>
                                                 <div class="font-weight-bold">{{ $player->user_name }}</div>
                                                 <small class="text-muted">{{ $player->name ?? $player->user_name }}</small>
                                             </div>
-                                            <span class="text-primary">
-                                                <i class="fas fa-comments mr-1"></i>
-                                                Chat
-                                            </span>
+                                            <div class="d-flex align-items-center">
+                                                <span class="text-primary">
+                                                    <i class="fas fa-comments mr-1"></i>
+                                                    Chat
+                                                </span>
+                                                <span class="badge badge-danger ml-2 player-unread-badge {{ ($player->unread_chat_count ?? 0) > 0 ? '' : 'd-none' }}"
+                                                    data-player-id="{{ $player->id }}"
+                                                    data-count="{{ $player->unread_chat_count ?? 0 }}">
+                                                    {{ $player->unread_chat_count ?? '' }}
+                                                </span>
+                                            </div>
                                         </button>
                                     @endforeach
                                 </div>

@@ -11,7 +11,7 @@ class ChatSocketNotifier
 {
     public function notify(ChatMessage $message): void
     {
-        $message->loadMissing(['sender:id,name,user_name']);
+        $message->loadMissing(['sender:id,name,user_name', 'player:id,user_name,name']);
 
         $recipientId = $message->receiver_id;
 
@@ -29,6 +29,7 @@ class ChatSocketNotifier
                 'type' => 'chat',
                 'agent_id' => $message->agent_id,
                 'player_id' => $message->player_id,
+                'player_user_name' => $message->player?->user_name,
                 'sender_id' => $message->sender_id,
                 'sender_type' => $message->sender_type,
                 'message_id' => $message->id,
