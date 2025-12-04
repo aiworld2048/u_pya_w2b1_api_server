@@ -144,7 +144,7 @@
     </style>
 @endsection
 
-@push('script')
+@section('script')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const chatPage = document.getElementById('chat-page');
@@ -155,7 +155,6 @@
             const baseUrl = chatPage.dataset.chatBaseUrl;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
             const modalElement = document.getElementById('chatModal');
-            const modal = $('#chatModal');
             const modalPlayerName = document.getElementById('chatModalPlayerName');
             const messagesContainer = document.getElementById('chatModalMessages');
             const errorBox = document.getElementById('chatModalError');
@@ -164,23 +163,64 @@
             const refreshBtn = document.getElementById('chatModalRefreshBtn');
             const form = document.getElementById('chatModalForm');
 
+            const playerTriggers = new Map();
+            document.querySelectorAll('.player-chat-trigger').forEach((button) => {
+                playerTriggers.set(String(button.dataset.playerId), button);
+            });
+
+            const playerBadgeMap = new Map();
+            document.querySelectorAll('.player-unread-badge').forEach((badge) => {
+                playerBadgeMap.set(String(badge.dataset.playerId), badge);
+            });
+
             let currentPlayerId = null;
+            let isModalVisible = false;
 
-            const escapeHtml = (value = '') => {
-                value = `${value}`;
+            const $modal = window.$ && window.$.fn && typeof window.$('#chatModal').modal === 'function'
+                ? window.$('#chatModal')
+                : null;
+            let bootstrapModal = null;
 
-                return value.replace(/[&<>"']/g, (char) => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;',
-                }[char]));
+            const ensureModalInstance = () => {
+                if (bootstrapModal) {
+                    return bootstrapModal;
+                }
+
+                if (window.bootstrap?.Modal) {
+                    bootstrapModal = new window.bootstrap.Modal(modalElement, {
+                        backdrop: 'static',
+                        keyboard: true,
+                    });
+                }
+
+                return bootstrapModal;
             };
 
-            const formatMessage = (value) => {
-                return escapeHtml(value).replace(/\n/g, '<br>');
+            const showModal = () => {
+                if ($modal) {
+                    $modal.modal('show');
+                    return;
+                }
+
+                const instance = ensureModalInstance();
+                if (instance) {
+                    instance.show();
+                    return;
+                }
+
+                modalElement.classList.add('show');
+                modalElement.style.display = 'block';
             };
+
+            const escapeHtml = (value = '') => `${value}`.replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;',
+            }[char]));
+
+            const formatMessage = (value) => escapeHtml(value).replace(/\n/g, '<br>');
 
             const formatDate = (value) => {
                 if (!value) {
@@ -208,17 +248,8 @@
                 `;
             };
 
-            const renderMessages = (payload) => {
-                const items = payload?.data ?? [];
-
-                if (!items.length) {
-                    messagesContainer.innerHTML = '<p class="text-center text-muted my-3">No messages yet. Start the conversation!</p>';
-
-                    return;
-                }
-
-                items.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-                messagesContainer.innerHTML = items.map(renderMessageBubble).join('');
+            const appendMessageBubble = (message) => {
+                messagesContainer.insertAdjacentHTML('beforeend', renderMessageBubble(message));
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             };
 
@@ -235,131 +266,33 @@
             };
 
             const toggleComposer = (enabled) => {
-                input.disabled = !enabled;
-                sendBtn.disabled = !enabled;
-
-                if (!enabled) {
-                    input.value = '';
-                }
-            };
-
-            const loadMessages = () => {
-                if (!currentPlayerId) {
-                    return;
-                }
-
-                setError();
-                messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
-
-                fetch(`${baseUrl}/${currentPlayerId}/messages?per_page=50`, {
-                    headers: {
-                        'Accept': 'application/json',
-                    },
-                    credentials: 'same-origin',
-                })
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error('Unable to load messages.');
-                        }
-
-                        return response.json();
-                    })
-                    .then(renderMessages)
-                    .catch((error) => {
-                        setError(error.message ?? 'Failed to load messages.');
-                        messagesContainer.innerHTML = '<p class="text-center text-danger my-3">Failed to load messages.</p>';
-                    });
-            };
-
-            const openChatModal = (playerId, playerName) => {
-                currentPlayerId = playerId;
-                modalPlayerName.textContent = playerName;
-                toggleComposer(true);
-                setError();
-                messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
-                modal.modal('show');
-                loadMessages();
-                input.focus();
-            };
-
-            const playerButtons = document.querySelectorAll('.player-chat-trigger');
-            playerButtons.forEach((button) => {
-                button.addEventListener('click', () => {
-                    const playerId = button.dataset.playerId;
-                    const playerName = button.dataset.playerName;
-
-                    if (!playerId) {
-                        return;
-                    }
-
-                    openChatModal(playerId, playerName);
-                });
-            });
-
-            refreshBtn.addEventListener('click', () => loadMessages());
-
-            form.addEventListener('submit', (event) => {
-                event.preventDefault();
-
-                if (!currentPlayerId) {
-                    setError('Please select a player first.');
-                    return;
-                }
-
-                const message = input.value.trim();
-
-                if (!message) {
-                    setError('Message cannot be empty.');
-                    return;
-                }
-
-                setError();
-                sendBtn.disabled = true;
-                input.disabled = true;
-
-                fetch(`${baseUrl}/${currentPlayerId}/messages`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify({ message }),
-                })
-                    .then(async (response) => {
-                        if (!response.ok) {
-                            const data = await response.json().catch(() => ({}));
-                            const errorMessage = data?.message ?? 'Failed to send message.';
-
-                            throw new Error(errorMessage);
-                        }
-
-                        return response.json();
-                    })
-                    .then((payload) => {
+                if (input) {
+                    input.disabled = !enabled;
+                    if (!enabled) {
                         input.value = '';
-                        const bubble = renderMessageBubble(payload.data);
-                        messagesContainer.insertAdjacentHTML('beforeend', bubble);
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    })
-                    .catch((error) => {
-                        setError(error.message ?? 'Failed to send message.');
-                    })
-                    .finally(() => {
-                        sendBtn.disabled = false;
-                        input.disabled = false;
-                        input.focus();
-                    });
-            });
+                    }
+                }
 
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                currentPlayerId = null;
-                toggleComposer(false);
-                messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Select a player to load messages.</p>';
-                setError();
-            });
-        });
-    </script>
-@endpush
+                if (sendBtn) {
+                    sendBtn.disabled = !enabled;
+                }
+            };
+
+            const notifyChatRead = (playerId) => {
+                if (!playerId) {
+                    return;
+                }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.chatPageScriptInitialized !== 'undefined') {
+                return;
+            }
+            window.chatPageScriptInitialized = true;
+
+            const chatPage = document.getElementById('chat-page');
+            if (!chatPage) {
+                return;
+            }
+
+            @endsection
 
