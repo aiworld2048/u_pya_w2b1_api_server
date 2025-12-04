@@ -28,53 +28,78 @@
                             </div>
                         </div>
                     @else
-                        <div class="player-chat-accordion">
-                            @foreach ($players as $player)
-                                <div class="card player-card mb-3" data-player-id="{{ $player->id }}" data-player-name="{{ $player->user_name }}">
-                                    <div class="card-header d-flex justify-content-between align-items-center player-toggle" role="button" tabindex="0">
-                                        <div>
-                                            <div class="font-weight-bold">{{ $player->user_name }}</div>
-                                            <small class="text-muted">{{ $player->name ?? $player->user_name }}</small>
-                                        </div>
-                                        <i class="fas fa-chevron-down toggle-icon"></i>
-                                    </div>
-                                    <div class="card-body player-chat-panel d-none">
-                                        <div class="chat-messages border rounded bg-light mb-3 p-3" data-player-id="{{ $player->id }}">
-                                            <p class="text-center text-muted mb-0">Press refresh to load messages.</p>
-                                        </div>
-                                        <form class="chat-form" data-player-id="{{ $player->id }}">
-                                            <div class="form-group mb-2">
-                                                <textarea class="form-control" rows="3" placeholder="Type your message..."></textarea>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title mb-0">Your Players</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="player-list">
+                                    @foreach ($players as $player)
+                                        <button type="button"
+                                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center player-chat-trigger"
+                                            data-player-id="{{ $player->id }}"
+                                            data-player-name="{{ $player->user_name }}">
+                                            <div>
+                                                <div class="font-weight-bold">{{ $player->user_name }}</div>
+                                                <small class="text-muted">{{ $player->name ?? $player->user_name }}</small>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <small class="text-muted">Messages are private between you and {{ $player->user_name }}.</small>
-                                                <div>
-                                                    <button type="button" class="btn btn-outline-secondary btn-sm chat-refresh-btn" data-player-id="{{ $player->id }}">
-                                                        <i class="fas fa-sync-alt"></i>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-primary btn-sm chat-send-btn" data-player-id="{{ $player->id }}">
-                                                        <i class="fas fa-paper-plane mr-1"></i>Send
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="mt-2 text-danger small chat-error d-none"></div>
-                                        </form>
-                                    </div>
+                                            <span class="text-primary">
+                                                <i class="fas fa-comments mr-1"></i>
+                                                Chat
+                                            </span>
+                                        </button>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
     </section>
+
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chat with <span id="chatModalPlayerName">—</span></h5>
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-outline-secondary btn-sm mr-2" id="chatModalRefreshBtn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div id="chatModalMessages" class="chat-body border rounded mb-3">
+                        <p class="text-center text-muted my-3">Select a player to load messages.</p>
+                    </div>
+                    <div class="text-danger small mb-2 d-none" id="chatModalError"></div>
+                    <form id="chatModalForm">
+                        <div class="form-group">
+                            <label for="chatModalInput" class="sr-only">Message</label>
+                            <textarea class="form-control" id="chatModalInput" rows="3" placeholder="Type your message..." disabled></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Messages are private between you and this player.</small>
+                            <button type="submit" class="btn btn-primary" id="chatModalSendBtn" disabled>
+                                <i class="fas fa-paper-plane mr-1"></i>Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('styles')
     <style>
         .chat-body {
-            min-height: 400px;
-            max-height: 600px;
+            min-height: 320px;
+            max-height: 60vh;
             overflow-y: auto;
             background: #f8f9fa;
             padding: 1.25rem;
@@ -108,10 +133,6 @@
             justify-content: space-between;
             opacity: 0.8;
         }
-
-        .player-item.active {
-            background-color: #f0f8ff;
-        }
     </style>
 @endpush
 
@@ -125,6 +146,17 @@
 
             const baseUrl = chatPage.dataset.chatBaseUrl;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+            const modalElement = document.getElementById('chatModal');
+            const modal = $('#chatModal');
+            const modalPlayerName = document.getElementById('chatModalPlayerName');
+            const messagesContainer = document.getElementById('chatModalMessages');
+            const errorBox = document.getElementById('chatModalError');
+            const input = document.getElementById('chatModalInput');
+            const sendBtn = document.getElementById('chatModalSendBtn');
+            const refreshBtn = document.getElementById('chatModalRefreshBtn');
+            const form = document.getElementById('chatModalForm');
+
+            let currentPlayerId = null;
 
             const escapeHtml = (value = '') => {
                 value = `${value}`;
@@ -168,59 +200,50 @@
                 `;
             };
 
-            const renderMessages = (payload, container) => {
+            const renderMessages = (payload) => {
                 const items = payload?.data ?? [];
 
                 if (!items.length) {
-                    container.innerHTML = '<p class="text-center text-muted my-3">No messages yet. Start the conversation!</p>';
+                    messagesContainer.innerHTML = '<p class="text-center text-muted my-3">No messages yet. Start the conversation!</p>';
 
                     return;
                 }
 
                 items.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
-                container.innerHTML = items.map(renderMessageBubble).join('');
-                container.scrollTop = container.scrollHeight;
+                messagesContainer.innerHTML = items.map(renderMessageBubble).join('');
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             };
 
-            const setError = (box, message = '') => {
-                if (!box) {
-                    return;
-                }
-
+            const setError = (message = '') => {
                 if (!message) {
-                    box.classList.add('d-none');
-                    box.textContent = '';
+                    errorBox.classList.add('d-none');
+                    errorBox.textContent = '';
 
                     return;
                 }
 
-                box.classList.remove('d-none');
-                box.textContent = message;
+                errorBox.classList.remove('d-none');
+                errorBox.textContent = message;
             };
 
-            const loadMessages = (card, force = false) => {
-                if (!card) {
+            const toggleComposer = (enabled) => {
+                input.disabled = !enabled;
+                sendBtn.disabled = !enabled;
+
+                if (!enabled) {
+                    input.value = '';
+                }
+            };
+
+            const loadMessages = () => {
+                if (!currentPlayerId) {
                     return;
                 }
 
-                const playerId = card.dataset.playerId;
-                const messagesContainer = card.querySelector('.chat-messages');
-                const errorBox = card.querySelector('.chat-error');
-
-                if (!playerId || !messagesContainer) {
-                    return;
-                }
-
-                if (card.dataset.loading === 'true' && !force) {
-                    return;
-                }
-
-                card.dataset.loading = 'true';
-                setError(errorBox);
+                setError();
                 messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
 
-                fetch(`${baseUrl}/${playerId}/messages?per_page=50`, {
+                fetch(`${baseUrl}/${currentPlayerId}/messages?per_page=50`, {
                     headers: {
                         'Accept': 'application/json',
                     },
@@ -233,115 +256,100 @@
 
                         return response.json();
                     })
-                    .then((payload) => {
-                        renderMessages(payload, messagesContainer);
-                        card.dataset.loaded = 'true';
-                    })
+                    .then(renderMessages)
                     .catch((error) => {
-                        setError(errorBox, error.message ?? 'Failed to load messages.');
+                        setError(error.message ?? 'Failed to load messages.');
                         messagesContainer.innerHTML = '<p class="text-center text-danger my-3">Failed to load messages.</p>';
-                    })
-                    .finally(() => {
-                        card.dataset.loading = 'false';
                     });
             };
 
-            const cards = Array.from(document.querySelectorAll('.player-card'));
+            const openChatModal = (playerId, playerName) => {
+                currentPlayerId = playerId;
+                modalPlayerName.textContent = playerName;
+                toggleComposer(true);
+                setError();
+                messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Loading messages...</p>';
+                modal.modal('show');
+                loadMessages();
+                input.focus();
+            };
 
-            cards.forEach((card) => {
-                const playerId = card.dataset.playerId;
-                const panel = card.querySelector('.player-chat-panel');
-                const toggle = card.querySelector('.player-toggle');
-                const icon = card.querySelector('.toggle-icon');
-                const form = card.querySelector('.chat-form');
-                const textarea = form?.querySelector('textarea');
-                const sendBtn = card.querySelector('.chat-send-btn');
-                const refreshBtn = card.querySelector('.chat-refresh-btn');
-                const messagesContainer = card.querySelector('.chat-messages');
-                const errorBox = card.querySelector('.chat-error');
+            const playerButtons = document.querySelectorAll('.player-chat-trigger');
+            playerButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const playerId = button.dataset.playerId;
+                    const playerName = button.dataset.playerName;
 
-                if (!playerId || !panel || !toggle || !form || !textarea || !sendBtn || !refreshBtn || !messagesContainer) {
-                    return;
-                }
-
-                const togglePanel = () => {
-                    const isHidden = panel.classList.contains('d-none');
-
-                    if (isHidden) {
-                        panel.classList.remove('d-none');
-                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-
-                        if (card.dataset.loaded !== 'true') {
-                            loadMessages(card);
-                        }
-
-                        textarea.focus();
-                    } else {
-                        panel.classList.add('d-none');
-                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                    }
-                };
-
-                toggle.addEventListener('click', togglePanel);
-                toggle.addEventListener('keypress', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        togglePanel();
-                    }
-                });
-
-                refreshBtn.addEventListener('click', () => loadMessages(card, true));
-
-                form.addEventListener('submit', (event) => {
-                    event.preventDefault();
-
-                    const message = textarea.value.trim();
-
-                    if (!message) {
-                        setError(errorBox, 'Message cannot be empty.');
+                    if (!playerId) {
                         return;
                     }
 
-                    setError(errorBox);
-                    sendBtn.disabled = true;
-                    textarea.disabled = true;
-
-                    fetch(`${baseUrl}/${playerId}/messages`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                        },
-                        credentials: 'same-origin',
-                        body: JSON.stringify({ message }),
-                    })
-                        .then(async (response) => {
-                            if (!response.ok) {
-                                const data = await response.json().catch(() => ({}));
-                                const errorMessage = data?.message ?? 'Failed to send message.';
-
-                                throw new Error(errorMessage);
-                            }
-
-                            return response.json();
-                        })
-                        .then((payload) => {
-                            textarea.value = '';
-                            const bubble = renderMessageBubble(payload.data);
-                            messagesContainer.insertAdjacentHTML('beforeend', bubble);
-                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                            card.dataset.loaded = 'true';
-                        })
-                        .catch((error) => {
-                            setError(errorBox, error.message ?? 'Failed to send message.');
-                        })
-                        .finally(() => {
-                            sendBtn.disabled = false;
-                            textarea.disabled = false;
-                            textarea.focus();
-                        });
+                    openChatModal(playerId, playerName);
                 });
+            });
+
+            refreshBtn.addEventListener('click', () => loadMessages());
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (!currentPlayerId) {
+                    setError('Please select a player first.');
+                    return;
+                }
+
+                const message = input.value.trim();
+
+                if (!message) {
+                    setError('Message cannot be empty.');
+                    return;
+                }
+
+                setError();
+                sendBtn.disabled = true;
+                input.disabled = true;
+
+                fetch(`${baseUrl}/${currentPlayerId}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ message }),
+                })
+                    .then(async (response) => {
+                        if (!response.ok) {
+                            const data = await response.json().catch(() => ({}));
+                            const errorMessage = data?.message ?? 'Failed to send message.';
+
+                            throw new Error(errorMessage);
+                        }
+
+                        return response.json();
+                    })
+                    .then((payload) => {
+                        input.value = '';
+                        const bubble = renderMessageBubble(payload.data);
+                        messagesContainer.insertAdjacentHTML('beforeend', bubble);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    })
+                    .catch((error) => {
+                        setError(error.message ?? 'Failed to send message.');
+                    })
+                    .finally(() => {
+                        sendBtn.disabled = false;
+                        input.disabled = false;
+                        input.focus();
+                    });
+            });
+
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                currentPlayerId = null;
+                toggleComposer(false);
+                messagesContainer.innerHTML = '<p class="text-center text-muted my-3">Select a player to load messages.</p>';
+                setError();
             });
         });
     </script>
