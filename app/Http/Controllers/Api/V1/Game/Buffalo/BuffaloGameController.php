@@ -681,16 +681,16 @@ class BuffaloGameController extends Controller
                     ]);
                 }
                 
-                // Log::info('W2B1 Buffalo Game Launch - Success', [
-                //     'user_id' => $user->id,
-                //     'user_name' => $user->user_name,
-                //     'room_id' => $roomId,
-                //     'game_id' => $gameId,
-                //     'game_url' => $gameUrl,
-                //     'site_prefix' => $sitePrefix,
-                //     'lobby_url' => $lobbyUrl,
-                //     'return_game_url' => $returnGameUrl,
-                // ]);
+                Log::info('W2B1 Buffalo Game Launch - Success', [
+                    'user_id' => $user->id,
+                    'user_name' => $user->user_name,
+                    'room_id' => $roomId,
+                    'game_id' => $gameId,
+                    'game_url' => $gameUrl,
+                    'site_prefix' => $sitePrefix,
+                    'lobby_url' => $lobbyUrl,
+                    'return_game_url' => $returnGameUrl,
+                ]);
                 
                 return response()->json([
                     'code' => 1,
