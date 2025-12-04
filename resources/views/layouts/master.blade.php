@@ -68,6 +68,10 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                @php
+                    $authUser = auth()->user();
+                    $isAgentUser = $authUser && ((int) $authUser->type === \App\Enums\UserType::Agent->value || $authUser->roles->pluck('title')->contains('Agent'));
+                @endphp
                 @can('player_wallet_deposit')
                     @php
                         $unreadNotifications = auth()->user()->unreadNotifications;
@@ -210,6 +214,70 @@
                     <audio id="notificationSound" src="{{ asset('sounds/noti.wav') }}" preload="auto" class="d-none"></audio>
                 @endcan
 
+                @if ($isAgentUser)
+                    @php
+                        $chatUnreadMessages = \App\Models\ChatMessage::query()
+                            ->where('receiver_id', $authUser->id)
+                            ->whereNull('read_at')
+                            ->with(['sender:id,user_name,name'])
+                            ->latest('id')
+                            ->take(10)
+                            ->get();
+                        $chatUnreadCount = $chatUnreadMessages->count();
+                    @endphp
+                    <li class="nav-item dropdown mx-1">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="chatNotificationDropdown"
+                            role="button" data-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-chat-dots"></i>
+                            <small class="text-muted ml-1">Chat</small>
+                            <span class="navbar-badge badge bg-danger text-white rounded-pill"
+                                id="chatNotificationCount">{{ $chatUnreadCount }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right shadow-lg p-0"
+                            aria-labelledby="chatNotificationDropdown">
+                            <li class="dropdown-header text-uppercase small text-secondary px-3 py-2">
+                                Latest player messages
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-0">
+                            </li>
+                            <li class="px-0">
+                                <div class="notification-list" id="chatNotificationList">
+                                    @forelse ($chatUnreadMessages as $chatMessage)
+                                        <a href="{{ route('admin.chat.index') }}"
+                                            class="dropdown-item py-2 border-bottom d-block text-reset">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <strong class="text-dark">
+                                                    {{ $chatMessage->sender->user_name ?? $chatMessage->sender->name ?? 'Player' }}
+                                                </strong>
+                                                <small class="text-muted">
+                                                    {{ $chatMessage->created_at?->diffForHumans() }}
+                                                </small>
+                                            </div>
+                                            <small class="text-secondary d-block">
+                                                {{ \Illuminate\Support\Str::limit($chatMessage->message, 80) }}
+                                            </small>
+                                        </a>
+                                    @empty
+                                        <p class="dropdown-item text-center text-muted mb-0">
+                                            No unread chat messages
+                                        </p>
+                                    @endforelse
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider my-0">
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.chat.index') }}"
+                                    class="dropdown-item text-center text-primary fw-bold">
+                                    Go to chat center
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+
                 <li class="nav-item dropdown">
                     <a class="nav-link"
                         href="{{ route('admin.changePassword', \Illuminate\Support\Facades\Auth::id()) }}">
@@ -306,8 +374,9 @@
                         @endcan
 
                         @php
-                            $user = auth()->user();
-                            $isAgent = $user && ($user->type == \App\Enums\UserType::Agent->value || $user->roles->pluck('title')->contains('Agent'));
+                            $user = $authUser;
+                            $isAgent = $isAgentUser;
+                            $agentChatRoutes = ['admin.chat.index', 'admin.chat.messages', 'admin.chat.messages.store'];
                         @endphp
                         
                         @if($isAgent)
@@ -336,6 +405,15 @@
                                     <i class="fab fa-dochub"></i>
                                     <p>
                                         Deposit Request
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.chat.index') }}"
+                                    class="nav-link {{ in_array(Route::currentRouteName(), $agentChatRoutes, true) ? 'active' : '' }}">
+                                    <i class="fas fa-comments"></i>
+                                    <p>
+                                        Player Chat
                                     </p>
                                 </a>
                             </li>
