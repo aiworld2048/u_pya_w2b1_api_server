@@ -14,7 +14,7 @@ return [
     'site' => [
         'name' => env('BUFFALO_SITE_NAME', 'W2B1'),
         'prefix' => env('BUFFALO_SITE_PREFIX', 'gcc'),
-        'url' => env('BUFFALO_SITE_URL', 'https://goldencitycasino123.pro/'), // Must match provider config for token generation
+        'url' => env('BUFFALO_SITE_URL', 'https://goldencitycasino123.pro'), // Must match provider config for token generation
         'lobby_url' => env('BUFFALO_SITE_LOBBY_URL', ''), // Lobby redirect URL // https://online.W2B1.com
     ],
 
