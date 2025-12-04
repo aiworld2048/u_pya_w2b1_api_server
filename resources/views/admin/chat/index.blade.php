@@ -103,7 +103,7 @@
     </div>
 @endsection
 
-@push('styles')
+@section('style')
     <style>
         .chat-body {
             min-height: 320px;
@@ -142,9 +142,9 @@
             opacity: 0.8;
         }
     </style>
-@endpush
+@endsection
 
-@push('scripts')
+@push('script')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const chatPage = document.getElementById('chat-page');
