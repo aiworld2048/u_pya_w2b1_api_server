@@ -25,7 +25,7 @@ class PlayerChatController extends Controller
             ], 422);
         }
 
-        $perPage = (int) $request->integer('per_page', 30);
+        $perPage = (int) $request->integer('per_page', 5);
 
         $messages = ChatMessage::query()
             ->forParticipants($player->agent_id, $player->id)
